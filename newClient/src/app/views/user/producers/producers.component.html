@@ -1,0 +1,102 @@
+<c-row ngPreserveWhitespaces>
+  <div class="text-end">
+    <button
+      cButton
+      color="info"
+      shape="rounded-pill"
+      class="text-white my-3"
+      (click)="newOpenModal()"
+    >
+      Nuevo productor
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table [hover]="false" cTable>
+      <thead>
+        <tr>
+          <th style="text-align: right">#</th>
+          <th>¿ACTIVO?</th>
+          <th>RUT</th>
+          <th>NOMBRE</th>
+          <th>GRUPO</th>
+          <th style="text-align: right">ACCIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (company of companies; track company; let i = $index) {
+        <tr>
+          <td align="right">{{ i + 1 + (page - 1) * pageSize }}</td>
+          <td>{{ company.active ? "SÍ" : "NO" }}</td>
+          <th>{{ company.rut }}</th>
+          <td>{{ company.name }} {{ company.lastname }}</td>
+          <td>
+            @if (company.group) {
+            {{ company.group.name }}
+            }
+          </td>
+          <td align="right">
+            <c-button-group aria-label="Todos" role="group">
+              <button
+                class="me-1"
+                size="sm"
+                cButton
+                shape="rounded-pill"
+                color="info"
+                (click)="viewCompany(company)"
+              >
+                <fa-icon class="text-white" [icon]="faEye"></fa-icon>
+              </button>
+
+              @if (company.group.advisors.includes(user.id) || user.role ==
+              'admin') {
+              <button
+                class="me-1"
+                size="sm"
+                cButton
+                shape="rounded-pill"
+                color="info"
+                (click)="editModal(company._id)"
+              >
+                <fa-icon
+                  class="text-white"
+                  [icon]="faPenToSquare"
+                ></fa-icon></button
+              >}
+
+              <!-- <button class="me-1" size="sm" cButton shape="rounded-pill" color="info" (click)="removeCompany(company._id)">
+                                    <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                                </button> -->
+            </c-button-group>
+
+            <!-- <button class="btn btn-primary mr-1" (click)="viewCompany(company._id)"><i
+                                    class="fa fa-eye"></i> Ver
+                            </button>
+                            <button class="btn btn-warning mr-1"
+                                    (click)="openModal('modal-lg', 'modalEdit', company._id)"><i
+                                    class="fa fa-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-danger" (click)="removeCompany(company._id)"><i
+                                    class="fa fa-trash"></i> Eliminar
+                            </button> -->
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</c-row>
+<c-row class="mt-3">
+  <ngb-pagination
+    [collectionSize]="total"
+    [page]="page"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+    aria-label="Pagination"
+    [maxSize]="5"
+    [rotate]="true"
+  ></ngb-pagination>
+  <p>Total: {{ total }}</p>
+</c-row>
+
+<toaster-container [toasterconfig]="config"></toaster-container>

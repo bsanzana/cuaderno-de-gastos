@@ -1,0 +1,31 @@
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body p-2 p-md-4">
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/administracion/gestion/productores']"><i class="nav-icon fas fa-file-alt"></i> Productores </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/administracion/gestion/grupo-productores']"><i class="nav-icon fa fa-university"></i> Unidad operativa </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/administracion/gestion/usuarios']"><i class="nav-icon fa fa-object-group"></i> Cuentas de usuario </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/administracion/gestion/especialistas']"><i class="nav-icon fa fa-object-group"></i> Especialistas </a>
+              </li>
+                
+            </ul>
+            <div class="p-md-2">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    

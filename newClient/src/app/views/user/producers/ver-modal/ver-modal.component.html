@@ -1,0 +1,75 @@
+<div class="modal-header bg-info text-white">
+    <h5 class="modal-title">{{company?.name}} ({{company?.rut}})</h5>
+    <button type="button" class="btn-close" aria-label="Close"
+     (click)="activeModal.dismiss('Cross click')">
+    </button>
+  </div>
+
+<div class="modal-body">
+    <div class="form-group row mb-2">
+        <label class="col-md-6">Nombre</label>
+        <div class="col-md-6">
+            <p>{{company?.name}} {{company?.lastname}}</p>
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label class="col-md-6">Rut</label>
+        <div class="col-md-6">
+            <p>{{company?.rut}}</p>
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label class="col-md-6">Grupo de productores</label>
+        <div class="col-md-6">
+            <p>{{company?.group.name}}</p>
+        </div>
+    </div>
+    <h5>Campos para seguimiento</h5>
+    <table class="table table-responsive-sm table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Sector</th>
+            <th>Dirección</th>
+            <th>Rol</th>
+            <th>Ha</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let field of company?.fields; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ field.name }}</td>
+            <td>{{ field.sector }}</td>
+            <td>{{ field.address }}</td>
+            <td>{{ field.rol }}</td>
+            <td *ngIf="field.ha.$numberDecimal; else ha">{{ field.ha.$numberDecimal }}</td>
+            <ng-template #ha>
+                <td>{{ field.ha }}</td>
+            </ng-template>
+        </tr>
+        </tbody>
+    </table>
+    <h5 class="mt-3">Maquinaria</h5>
+    <table class="table table-responsive-sm table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>HP</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let machine of company?.machinery; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ machine.name }}</td>
+            <td>{{ machine.brand }}</td>
+            <td>{{ machine.hp }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" (click)="activeModal.dismiss('Cross click')">Cerrar</button>
+</div>

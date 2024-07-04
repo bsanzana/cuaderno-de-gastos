@@ -1,0 +1,108 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Agregar nueva semilla</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <c-container>
+    <form cForm [formGroup]="agregarForm" (ngSubmit)="onSubmit()">
+      <c-row>
+        <c-col xs="6"
+          ><div class="">
+            <label cLabel for="name">Nombre de semilla</label>
+            <input
+              cFormControl
+              formControlName="name"
+              id="nameSeed"
+              type="input"
+              placeholder="Nombre de Semilla"
+              [ngClass]="{
+                'is-invalid': !agregarForm.controls['name'].valid,
+                'is-valid': agregarForm.controls['name'].valid
+              }"
+            /></div
+        ></c-col>
+        <c-col xs="4"
+          ><div class="">
+            <label cLabel for="active">¿Activo?</label><br />
+            <ui-switch id="active" formControlName="active"></ui-switch></div
+        ></c-col>
+      </c-row>
+      <c-row>
+        <c-col xs="6">
+          <label cLabel for="">Tipo de cultivo</label>
+          <select
+            formControlName="crop"
+            cSelect
+            [ngClass]="{
+              'is-invalid': agregarForm.controls['crop'].invalid,
+              'is-valid': agregarForm.controls['crop'].valid
+            }"
+          >
+            <option [value]="null" disabled [selected]>
+              Selecciona un tipo de cultivo
+            </option>
+            @for (crop of crops; track crop._id) {
+            <option value="{{ crop._id }}">{{ crop.name }}</option>
+            }
+          </select>
+        </c-col>
+        <c-col xs="6">
+          <label cLabel for="">Categoría del insumo</label>
+          <select
+            formControlName="category"
+            cSelect
+            [ngClass]="{
+              'is-invalid': agregarForm.controls['category'].invalid,
+              'is-valid': agregarForm.controls['category'].valid
+            }"
+          >
+            <option [value]="null" disabled [selected]>
+              Selecciona una categoría
+            </option>
+            @for (category of categorys; track category._id) {
+            <option value="{{ category._id }}">{{ category.name }}</option>
+            }
+          </select>
+        </c-col>
+      </c-row>
+    </form>
+  </c-container>
+</div>
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="onSubmit()"
+          [disabled]="!agregarForm.valid"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="secondary"
+          (click)="activeModal.dismiss()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<toaster-container></toaster-container>

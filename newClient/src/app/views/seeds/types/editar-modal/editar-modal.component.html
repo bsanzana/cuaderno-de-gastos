@@ -1,0 +1,70 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Editar tipo de semilla <strong>{{seedType.name}}</strong></h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <c-container>
+    <form cForm [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <c-row>
+        <c-col xs="8"
+          ><div class="">
+            <label cLabel for="nameSeedType">Nombre de tipo de semilla</label>
+            <input
+              cFormControl
+              formControlName="name"
+              id="nameSeedType"
+              type="input"
+              placeholder="Nombre"
+              [ngClass]="{
+                'is-invalid': !editForm.controls['name'].valid,
+                'is-valid': editForm.controls['name'].valid
+              }"
+            /></div
+        ></c-col>
+        <c-col xs="4"
+          ><div class="">
+            <label cLabel for="active">¿Activo?</label><br />
+            <ui-switch id="active" formControlName="active"></ui-switch></div
+        ></c-col>
+      </c-row>
+    </form>
+  </c-container>
+</div>
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="onSubmit()"
+          [disabled]="!editForm.valid"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="secondary"
+          (click)="activeModal.dismiss()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<toaster-container></toaster-container>

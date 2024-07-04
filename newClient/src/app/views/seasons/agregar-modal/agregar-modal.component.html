@@ -1,0 +1,72 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Agregar nueva temporada</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <form cForm [formGroup]="agregarForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label cLabel for="name">Nombre de temporada </label>
+      <input
+        cFormControl
+        formControlName="name"
+        id="nameSeason"
+        type="input"
+        placeholder="Nombre de temporada"
+        [ngClass]="{
+          'is-invalid': !agregarForm.controls['name'].valid ,
+          'is-valid'  : agregarForm.controls['name'].valid
+        }"
+      />
+    </div>
+    <div class="mb-3">
+      <label cLabel for="init_date">Escoge una fecha de inicio</label>
+      <c-date-picker id="init_date" placeholder="día/mes/año" formControlName="init_date" locale="es" #datePicker="cDatePicker">
+        <ng-template cTemplateId="datePickerFooter" let-dropdown>
+          <button cButton class="text-white" color="info" size="sm" [disabled]="!agregarForm.controls['init_date'].valid" cDropdownClose [dropdownComponent]="dropdown">OK
+          </button>
+        </ng-template>
+      </c-date-picker>
+    </div>
+
+    <div class="mb-3">
+      <label cLabel for="end_date">Escoge una fecha de termino</label>
+      <c-date-picker id="end_date" placeholder="día/mes/año" formControlName="end_date" locale="es" >
+        <ng-template cTemplateId="datePickerFooter" let-dropdown>
+          <button cButton class="text-white" color="info" size="sm"  [disabled]="!agregarForm.controls['end_date'].valid" cDropdownClose [dropdownComponent]="dropdown">OK
+          </button>
+        </ng-template>
+      </c-date-picker>
+    </div>
+
+    <div class="mb-3">
+      <label cLabel for="active">¿Activo?</label><br>
+      <ui-switch id="active" formControlName="active"></ui-switch>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button cButton class="text-white" color="info" (click)="onSubmit()" [disabled]="!agregarForm.valid">
+          Guardar
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button cButton class="text-white" color="secondary" (click)="activeModal.dismiss()" >Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<toaster-container></toaster-container>

@@ -1,0 +1,295 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Editando usuario</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="agregarForm" (ngSubmit)="onSubmit()">
+    <div class="form-group row mb-3">
+      <div class="col-md-7">
+        <label class="col-md-12 form-control-label" for="rut">RUT</label>
+        <div class="col-md-12">
+          <input
+            (input)="inputEvent($event)"
+            type="text"
+            cFormControl
+            appUppercase
+            formControlName="rut"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['rut'].errors &&
+                !agregarForm.controls['rut'].pristine,
+              'is-valid': agregarForm.controls['rut'].valid
+            }"
+          />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="col-md-12 form-control-label" for="active"
+          >Autorización</label
+        >
+        <div class="col-md-12">
+          <ui-switch formControlName="active" size="small"></ui-switch>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-5">
+        <label class="col-md-12 form-control-label" for="name">Nombre</label>
+        <div class="col-md-12">
+          <input
+            type="text"
+            appUppercase
+            cFormControl
+            formControlName="name"
+            appUppercase
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['name'].errors &&
+                !agregarForm.controls['name'].pristine,
+              'is-valid': agregarForm.controls['name'].valid
+            }"
+          />
+        </div>
+      </div>
+      <div class="col-md-7">
+        <label class="col-md-12 form-control-label" for="lastname"
+          >Apellidos</label
+        >
+        <div class="col-md-12">
+          <input
+            type="text"
+            appUppercase
+            cFormControl
+            formControlName="lastname"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['lastname'].errors &&
+                !agregarForm.controls['lastname'].pristine,
+              'is-valid': agregarForm.controls['lastname'].valid
+            }"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-6">
+        <label class="col-md-12 form-control-label" for="phone">Teléfono</label>
+        <div class="col-md-12">
+          <input
+            type="text"
+            cFormControl
+            formControlName="phone"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['phone'].errors &&
+                !agregarForm.controls['phone'].pristine,
+              'is-valid': agregarForm.controls['phone'].valid
+            }"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="col-md-12 form-control-label" for="nombre">Mail</label>
+        <div class="col-md-12">
+          <input
+            type="text"
+            cFormControl
+            formControlName="email"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['email'].errors &&
+                !agregarForm.controls['email'].pristine,
+              'is-valid': agregarForm.controls['email'].valid
+            }"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="form-group row mb-3">
+            <label class="col-md-3 form-control-label" for="name-input">Nombre</label>
+            <div class="col-md-9">
+              <input
+                cFormControl
+                formControlName="name"
+                appUppercase
+                placeholder="Nombre del producto"
+                [ngClass]="{
+                  'is-invalid': agregarForm.controls['name'].errors && !agregarForm.controls['name'].pristine,
+                  'is-valid'  : agregarForm.controls['name'].valid
+                }"
+              >
+            </div>
+        </div> -->
+
+    <div formGroupName="address">
+      <div class="form-group row mb-3">
+        <label class="col-md-12 form-control-label" for="address"
+          >Dirección</label
+        >
+        <div class="col-md-12">
+          <input type="text" cFormControl formControlName="address" />
+        </div>
+      </div>
+
+      <div class="form-group row mb-3">
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label" for="region"
+            >Región</label
+          >
+          <div class="col-md-12">
+            <input type="text" cFormControl formControlName="region" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label" for="province"
+            >Provincia</label
+          >
+          <div class="col-md-12">
+            <input type="text" cFormControl formControlName="province" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label" for="commune"
+            >Comuna</label
+          >
+          <div class="col-md-12">
+            <input type="text" cFormControl formControlName="commune" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-9">
+        <label class="col-md-12 form-control-label" for="role-input">Rol</label>
+        <div class="col-md-12">
+          <select
+            cSelect
+            class="form-control"
+            formControlName="role"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['role'].errors &&
+                !agregarForm.controls['role'].pristine,
+              'is-valid': agregarForm.controls['role'].valid
+            }"
+          >
+            <option [ngValue]="null" disabled>Selecciona un cargo</option>
+            <option *ngFor="let role of roleList" [value]="role">
+              {{ role }}
+            </option>
+            <!-- | roleTranslate  -->
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <label class="col-md-12 form-control-label" for="show"
+          >¿Contacto?</label
+        >
+        <div class="col-md-12">
+          <ui-switch formControlName="show" size="small"></ui-switch>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-12">
+        <label class="col-md-12 form-control-label">Especialistas</label>
+        <div class="col-xs-12">
+          <c-multi-select
+            placeholder="Asigne el/los especialistas"
+            selectAll="false"
+            selectAllLabel="Seleccionar todos"
+            multiple
+            cSelect
+            formControlName="specialists"
+          >
+            @for (especialista of especialistas; track especialista) {
+            <c-multi-select-option [value]="especialista._id">
+              {{ especialista.name }} {{ especialista.lastname }}
+            </c-multi-select-option>
+            }
+          </c-multi-select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="form-group mb-3">
+        <label class="form-control-label">Avatar</label>
+        <div class="d-flex align-items-center">
+          <input type="file" (change)="uploadImage($event, 'avatar')" class="form-control me-3"/>
+          <img *ngIf="user?.avatar" cImg fluid [rounded]="true" width="150" src="{{ ENDPOINT_AVATAR_IMAGE }}{{ user?.avatar }}" />
+        </div>
+      </div>
+    
+      <div class="form-group mb-3">
+        <label class="form-control-label">Logo</label>
+        <div class="d-flex align-items-center">
+          <input type="file" (change)="uploadImage($event, 'logo')" class="form-control me-3"/>
+          <img *ngIf="user?.logo" cImg fluid [rounded]="true" width="150" src="{{ ENDPOINT_LOGO_IMAGE }}{{ user?.logo }}" />
+        </div>
+      </div>
+    
+      <div class="form-group mb-3">
+        <label class="form-control-label">Firma</label>
+        <div class="d-flex align-items-center">
+          <input type="file" (change)="uploadImage($event, 'firma')" class="form-control me-3"/>
+          <img *ngIf="user?.firma" cImg fluid [rounded]="true" width="150" src="{{ ENDPOINT_FIRMA_IMAGE }}{{ user?.firma }}" />
+        </div>
+      </div>
+    
+      <div *ngIf="errorMessage" class="form-group mb-3">
+        <p class="text-danger">{{ errorMessage }}</p>
+      </div>
+    </div>
+    <div *ngIf="formError" class="alert alert-danger mb-3">
+      <p *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="onSubmit()"
+          [disabled]="!agregarForm.valid"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="secondary"
+          (click)="activeModal.dismiss('Cross click')"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<toaster-container [toasterconfig]="config"></toaster-container>

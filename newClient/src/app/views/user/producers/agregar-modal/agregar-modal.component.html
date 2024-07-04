@@ -1,0 +1,532 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Agregar nuevo productor</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="agregarForm" (ngSubmit)="onSubmit()" class="mb-4">
+    <div class="form-group row mb-3">
+      <div class="col-md-6">
+        <label class="col-md-12 form-control-label" for="rut">RUT</label>
+        <div class="col-md-12">
+          <input
+            (input)="inputEvent($event)"
+            type="text"
+            cFormControl
+            appUppercase
+            formControlName="rut"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['rut'].errors &&
+                !agregarForm.controls['rut'].pristine,
+              'is-valid': agregarForm.controls['rut'].valid
+            }"
+          />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <label class="col-md-12 form-control-label" for="active"
+          >Autorización</label
+        >
+        <div class="col-md-12">
+          <ui-switch formControlName="active" size="small"></ui-switch>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="col-md-12 form-control-label" for="active"
+          >¿Inicio de actividades SII?</label
+        >
+        <div class="col-md-12">
+          <ui-switch formControlName="activities_sii" size="small"></ui-switch>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-6">
+        <label class="col-md-12 form-control-label" for="name">Nombre</label>
+        <div class="col-md-12">
+          <input
+            type="text"
+            appUppercase
+            cFormControl
+            formControlName="name"
+            appUppercase
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['name'].errors &&
+                !agregarForm.controls['name'].pristine,
+              'is-valid': agregarForm.controls['name'].valid
+            }"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="col-md-12 form-control-label" for="lastname"
+          >Apellidos</label
+        >
+        <div class="col-md-12">
+          <input
+            type="text"
+            appUppercase
+            cFormControl
+            formControlName="lastname"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['lastname'].errors &&
+                !agregarForm.controls['lastname'].pristine,
+              'is-valid': agregarForm.controls['lastname'].valid
+            }"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-6">
+        <label class="col-md-12 form-control-label" for="group-input"
+          >Grupo asesor</label
+        >
+        <select
+          cSelect
+          class="form-control"
+          formControlName="group"
+          [ngClass]="{
+            'is-invalid':
+              agregarForm.controls['group'].errors &&
+              !agregarForm.controls['group'].pristine,
+            'is-valid': agregarForm.controls['group'].valid
+          }"
+        >
+          <option [ngValue]="null" disabled>Selecciona un grupo</option>
+          <option *ngFor="let group of groups" [value]="group._id">
+            {{ group.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="col-md-12 form-control-label" for="group-input"
+          >Género</label
+        >
+        <select
+          cSelect
+          class="form-control"
+          formControlName="gender"
+          [ngClass]="{
+            'is-invalid':
+              agregarForm.controls['gender'].errors &&
+              !agregarForm.controls['gender'].pristine,
+            'is-valid': agregarForm.controls['gender'].valid
+          }"
+        >
+          <option [value]="null" disabled [selected]>
+            Selecciona un género
+          </option>
+          @for (gender of genders; track $index) {
+          <option value="{{ gender }}">{{ gender }}</option>
+
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-6">
+        <label cLabel for="birth_date">Fecha de nacimiento</label>
+        <c-date-picker
+          id="birth_date"
+          placeholder="día/mes/año"
+          formControlName="birth_date"
+          locale="es"
+          #datePicker="cDatePicker"
+          closeOnSelect="true"
+        >
+        </c-date-picker>
+      </div>
+    </div>
+  </form>
+
+  <p>&nbsp;</p>
+
+  <c-nav variant="tabs">
+    <a
+      [active]="true"
+      [cTabContent]="tabContent"
+      [routerLink]
+      [tabPaneIdx]="0"
+      cNavLink
+      >Campos</a
+    >
+    <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="1" cNavLink
+      >Maquinaria</a
+    >
+  </c-nav>
+
+  <c-tab-content #tabContent="cTabContent">
+    <c-tab-pane class="p-3">
+      <form [formGroup]="fieldsForm" class="mb-4">
+        <div class="form-group row mb-3">
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="name"
+              >Nombre</label
+            >
+            <div class="col-md-12">
+              <input
+                type="text"
+                appUppercase
+                cFormControl
+                formControlName="name"
+                appUppercase
+                [ngClass]="{
+                  'is-invalid':
+                    fieldsForm.controls['name'].errors &&
+                    !fieldsForm.controls['name'].pristine,
+                  'is-valid': fieldsForm.controls['name'].valid
+                }"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="sector"
+              >Sector</label
+            >
+            <div class="form-group row mb-3">
+              <div class="col-md-6">
+                <label class="col-md-12 form-control-label" for="latitude"
+                  >Latitude</label
+                >
+                <div class="col-md-12">
+                  <input
+                    cFormControl
+                    type="number"
+                    id="latitude"
+                    formControlName="latitude"
+                    placeholder="Valor latitude"
+                  />
+                  <div
+                    *ngIf="
+                      fieldsForm.controls['latitude'].invalid &&
+                      fieldsForm.controls['latitude'].touched
+                    "
+                    class="error-message"
+                  >
+                    La latitud debe estar entre -90 y 90.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-12 form-control-label" for="longitude"
+                  >Longitude</label
+                >
+                <div class="col-md-12">
+                  <input
+                    cFormControl
+                    type="number"
+                    id="longitude"
+                    formControlName="longitude"
+                    placeholder="Valor longitude"
+                  />
+                  <div
+                    *ngIf="
+                      fieldsForm.controls['longitude'].invalid &&
+                      fieldsForm.controls['longitude'].touched
+                    "
+                    class="error-message"
+                  >
+                    La longitud debe estar entre -180 y 180.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row mb-3">
+              <label class="col-md-12 form-control-label" for="address"
+                >Dirección</label
+              >
+              <div class="col-md-12">
+                <input
+                  type="text"
+                  cFormControl
+                  formControlName="address"
+                  [ngClass]="{
+                    'is-invalid':
+                      fieldsForm.controls['address'].errors &&
+                      !fieldsForm.controls['address'].pristine,
+                    'is-valid': fieldsForm.controls['address'].valid
+                  }"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mb-3">
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="name">Rol</label>
+            <div class="col-md-12">
+              <input
+                type="text"
+                appUppercase
+                cFormControl
+                formControlName="rol"
+                appUppercase
+                [ngClass]="{
+                  'is-invalid':
+                    fieldsForm.controls['rol'].errors &&
+                    !fieldsForm.controls['rol'].pristine,
+                  'is-valid': fieldsForm.controls['rol'].valid
+                }"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="ha"
+              >Hectáreas</label
+            >
+            <div class="col-md-12">
+              <input
+                type="number"
+                cFormControl
+                formControlName="ha"
+                [ngClass]="{
+                  'is-invalid':
+                    fieldsForm.controls['ha'].errors &&
+                    !fieldsForm.controls['ha'].pristine,
+                  'is-valid': fieldsForm.controls['ha'].valid
+                }"
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="text-end">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="addFields()"
+          [disabled]="!fieldsForm.valid"
+        >
+          Agregar campo
+        </button>
+      </div>
+
+      @if(fields.length>0){
+      <div class="table-responsive my-4">
+        <table [hover]="false" cTable>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>NOMBRE</th>
+              <th>SECTOR</th>
+              <th>DIRECCIÓN</th>
+              <th>ROL</th>
+              <th>Ha</th>
+              <th style="text-align: right">ACCIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (field of fields; track field; let i = $index) {
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ field.name }}</td>
+              <td>{{ field.sector }}</td>
+              <td>{{ field.address }}</td>
+              <td>{{ field.rol }}</td>
+              <td>{{ field.ha }}</td>
+              <td align="right">
+                <button
+                  class="me-1"
+                  size="sm"
+                  cButton
+                  shape="rounded-pill"
+                  color="danger"
+                  (click)="removeField(i)"
+                >
+                  <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </c-tab-pane>
+
+    <c-tab-pane class="p-3">
+      <form
+        [formGroup]="machineryForm"
+        (ngSubmit)="addMachinery()"
+        class="mb-4"
+      >
+        <div class="form-group row mb-3">
+          <label class="col-md-12 form-control-label" for="name">Nombre</label>
+          <div class="col-md-12">
+            <input
+              appUppercase
+              type="text"
+              cFormControl
+              formControlName="name"
+              [ngClass]="{
+                'is-invalid':
+                  machineryForm.controls['name'].errors &&
+                  !machineryForm.controls['name'].pristine,
+                'is-valid': machineryForm.controls['name'].valid
+              }"
+            />
+          </div>
+        </div>
+        <div class="form-group row mb-3">
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="brand"
+              >Marca</label
+            >
+            <div class="col-md-12">
+              <input
+                type="text"
+                appUppercase
+                cFormControl
+                formControlName="brand"
+                [ngClass]="{
+                  'is-invalid':
+                    machineryForm.controls['brand'].errors &&
+                    !machineryForm.controls['brand'].pristine,
+                  'is-valid': machineryForm.controls['brand'].valid
+                }"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="ha">HP</label>
+            <div class="col-md-12">
+              <input
+                type="number"
+                appUppercase
+                cFormControl
+                formControlName="hp"
+                [ngClass]="{
+                  'is-invalid':
+                    machineryForm.controls['hp'].errors &&
+                    !machineryForm.controls['hp'].pristine,
+                  'is-valid': machineryForm.controls['hp'].valid
+                }"
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="text-end">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="addMachinery()"
+          [disabled]="!machineryForm.valid"
+        >
+          Agregar máquina
+        </button>
+      </div>
+
+      @if(machinerys.length>0){
+      <div class="table-responsive my-4">
+        <table [hover]="false" cTable>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>NOMBRE</th>
+              <th>MARCA</th>
+              <th>HP</th>
+              <th style="text-align: right">ACCIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (machinery of machinerys; track machinery; let i = $index) {
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ machinery.name }}</td>
+              <td>{{ machinery.brand }}</td>
+              <td>{{ machinery.hp }}</td>
+              <td align="right">
+                <button
+                  class="me-1"
+                  size="sm"
+                  cButton
+                  shape="rounded-pill"
+                  color="danger"
+                  (click)="removeMachinery(i)"
+                >
+                  <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </c-tab-pane>
+  </c-tab-content>
+
+  <!-- <c-card class="mb-4">
+        <c-card-header><h6 cCardTitle>Campos para seguimiento</h6></c-card-header>
+        <c-card-body>
+          
+          
+        </c-card-body>
+      </c-card>
+
+
+      <c-card>
+        <c-card-header><h6 cCardTitle>Maquinaria propia</h6></c-card-header>
+        <c-card-body>
+          
+          
+        </c-card-body>
+      </c-card> -->
+
+  <div *ngIf="formError" class="alert alert-danger mb-3">
+    <p *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="onSubmit()"
+          [disabled]="!agregarForm.valid"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="secondary"
+          (click)="activeModal.dismiss('Cross click')"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<toaster-container [toasterconfig]="config"></toaster-container>

@@ -1,0 +1,62 @@
+<c-container class="mt-5">
+  <c-row ngPreserveWhitespaces>
+    <c-col xs="12">
+      <c-card class="mb-4">
+        <c-card-header>
+          <button cButton class="text-white" color="danger" (click)="logOut()">
+            Cerrar sesión
+          </button>
+        </c-card-header>
+        <c-card-body>
+          <div class="table-responsive">
+            <table [hover]="false" cTable>
+              <thead></thead>
+              <tbody>
+                <tr>
+                  <th>#</th>
+                  <th>RUT</th>
+                  <th>PRODUCTOR</th>
+                  <th>UNIDAD OPERATIVA</th>
+                  <th>CAMPO</th>
+                  <th>TEMPORADA</th>
+                  <th class="text-center">ACCIÓN</th>
+                </tr>
+                @for (form of cuadernos; track form; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 + (page - 1) * pageSize }}</td>
+                  <td>{{ form.informacion_del_campo.company.rut }}</td>
+                  <td>{{ form.informacion_del_campo.company.name }}</td>
+                  <td>{{ form.informacion_del_campo.company.group.name }}</td>
+                  <td>
+                    @for (field of form.informacion_del_campo.company.fields;
+                    track $index) { @if(form.informacion_del_campo.company_field
+                    === field._id){
+                    {{ field.name }}
+                    } }
+                  </td>
+                  <td>{{ form.informacion_del_campo.season.name }}</td>
+                  <td class="text-center">
+                    <c-button-group aria-label="Todos" role="group">
+                      <button
+                        class="me-1"
+                        size="sm"
+                        cButton
+                        shape="rounded-pill"
+                        color="info"
+                        (click)="openCuaderno(form)"
+                      >
+                        <fa-icon class="text-white" [icon]="faEye"></fa-icon>
+                      </button>
+                      <app-export-excel [cuaderno]="form"></app-export-excel>
+                    </c-button-group>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+</c-container>

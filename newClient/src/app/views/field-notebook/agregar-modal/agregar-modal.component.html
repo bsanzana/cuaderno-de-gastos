@@ -1,0 +1,1221 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Nuevo cuaderno de campo</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="agregarForm" (ngSubmit)="onSubmit()" class="mb-4">
+    <div class="form-group row mb-3">
+      <div class="col-md-4">
+        <label class="col-md-12 form-control-label" for="company-input"
+          >Temporada</label
+        >
+        <div class="col-md-12">
+          <select
+            cSelect
+            class="form-control"
+            formControlName="season"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['season'].errors &&
+                !agregarForm.controls['season'].pristine,
+              'is-valid': agregarForm.controls['season'].valid
+            }"
+          >
+            <option [value]="null" disabled>Selecciona una temporada</option>
+            @for (group of seasons; track group._id) {
+            <option [value]="group._id">
+              {{ group.name }}
+            </option>
+            }
+
+            <!-- <option *ngFor="let group of groups" [ngValue]="group"  >{{ group.name }}</option> -->
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <label class="col-md-12 form-control-label" for="company-input"
+          >Productor</label
+        >
+        <div class="col-md-12">
+          <select
+            cSelect
+            class="form-control"
+            (change)="changeProductor($event.target.value)"
+            formControlName="company"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['company'].errors &&
+                !agregarForm.controls['company'].pristine,
+              'is-valid': agregarForm.controls['company'].valid
+            }"
+          >
+            <option [value]="null" disabled>Selecciona un productor</option>
+            @for (group of groups; track group._id) {
+            <option [value]="group._id">
+              {{ group.name }}
+            </option>
+            }
+
+            <!-- <option *ngFor="let group of groups" [ngValue]="group"  >{{ group.name }}</option> -->
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="col-md-12 form-control-label" for="possession"
+          >Identificación del predio</label
+        >
+        <div class="col-md-12">
+          <select
+            cSelect
+            class="form-control"
+            (change)="selectPredio($event.target.value)"
+            formControlName="company_field"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['company_field'].errors &&
+                !agregarForm.controls['company_field'].pristine,
+              'is-valid': agregarForm.controls['company_field'].valid
+            }"
+          >
+            <option [ngValue]="null" disabled>Selecciona un predio</option>
+            <option *ngFor="let group of companyField" [value]="group._id">
+              {{ group.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="pb-2 my-4 border-bottom">Información del campo</h3>
+
+    <div class="form-group row mb-3">
+      <div class="col-md-3">
+        <label class="col-md-12 form-control-label">Superficie total</label>
+        <div class="col-md-12">
+          <input type="number" formControlName="total_ha" cFormControl />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="col-md-12 form-control-label">Análisis de suelo</label>
+        <div class="col-md-12">
+          <select
+            cSelect
+            formControlName="soil_analysis"
+            class="form-control"
+            (change)="onSelectAnalisisSuelo($event.target.value)"
+          >
+            <option [value]="true">SÍ</option>
+            <option [value]="false">NO</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="col-md-12 form-control-label">Superficie cultivada</label>
+        <div class="col-md-12">
+          <input
+            type="number"
+            cFormControl
+            formControlName="cultivated_area"
+            (input)="habilitarFormularios($event.target.value)"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['cultivated_area'].errors &&
+                !agregarForm.controls['cultivated_area'].pristine,
+              'is-valid': agregarForm.controls['cultivated_area'].valid
+            }"
+          />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="col-md-12 form-control-label">Tenencia</label>
+        <div class="col-md-12">
+          <select
+            cSelect
+            class="form-control"
+            formControlName="possession"
+            (change)="onSelect($event.target.value)"
+            [ngClass]="{
+              'is-invalid':
+                agregarForm.controls['possession'].errors &&
+                !agregarForm.controls['possession'].pristine,
+              'is-valid': agregarForm.controls['possession'].valid
+            }"
+          >
+            <option [value]="null" disabled selected>
+              Selecciona la posesión
+            </option>
+            <option [value]="'Propietario'">Propietario</option>
+            <option [value]="'Arriendo'">Arriendo</option>
+            <option [value]="'Mediería'">Mediería</option>
+            <option [value]="'Usufructo'">Usufructo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    @if (mostrarSubirAnalisisSuelo) {
+    <div class="col-md-4 mb-3">
+      <c-card>
+        <c-card-body>
+          <label cLabel for="analisisSueloFile">
+            Cargar análisis de suelo</label
+          >
+          <input
+            cFormControl
+            id="analisisSueloFile"
+            type="file"
+            (change)="onFileSelected($event)"
+          />
+        </c-card-body>
+      </c-card>
+    </div>
+    } @if(showPossession){
+    <div class="mb-3" formGroupName="possession_rent">
+      <c-card>
+        <c-card-body>
+          <div class="form-group row mb-3">
+            <div class="col-md-4">
+              <label class="col-md-12 form-control-label"
+                >Costo del arriendo</label
+              >
+              <div class="col-md-12">
+                <input
+                  type="number"
+                  appUppercase
+                  cFormControl
+                  formControlName="cost"
+                />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="col-md-12 form-control-label">Fecha Inicio</label>
+              <div class="col-md-12">
+                <input type="date" cFormControl formControlName="start_date" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="col-md-12 form-control-label">Fecha Termino</label>
+              <div class="col-md-12">
+                <input type="date" cFormControl formControlName="end_date" />
+              </div>
+            </div>
+          </div>
+        </c-card-body>
+      </c-card>
+    </div>
+    }
+
+    <p>&nbsp;</p>
+    @if (habilitarForms) {
+    <c-nav variant="tabs" id="navForms">
+      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="0" cNavLink
+        >Cultivo</a
+      >
+      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="1" cNavLink
+        >Agua</a
+      >
+      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="2" cNavLink
+        >Maquinaria
+      </a>
+      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="3" cNavLink
+        >Insumos</a
+      >
+      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="4" cNavLink
+        >Mano de obra</a
+      >
+      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="5" cNavLink
+        >Otros costos</a
+      >
+      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="6" cNavLink
+        >Guía Análisis</a
+      >
+    </c-nav>
+    <c-tab-content #tabContent="cTabContent">
+      <c-tab-pane class="p-3" formGroupName="crop">
+        <div class="form-group row mb-3">
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Cultivo</label>
+            <div class="col-md-12">
+              <select
+                cSelect
+                formControlName="type_crop"
+                class="form-control"
+                (change)="selectTypeCrop($event.target.value)"
+              >
+                <option value="null">Selecciona un tipo de cultivo</option>
+                @for (group of crops; track group._id) {
+                <option [value]="group._id">
+                  {{ group.name }}
+                </option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Variedad</label>
+            <div class="col-md-12">
+              <select cSelect formControlName="variety" class="form-control">
+                <option value="null">Selecciona una variedad</option>
+                @for (seed of seedsFiltered; track seed._id) {
+                <option [value]="seed._id">
+                  {{ seed.name }}
+                </option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Tipo</label>
+            <div class="col-md-12">
+              <select cSelect formControlName="seed_type" class="form-control">
+                <option value="null">Selecciona un tipo</option>
+                @for (item of seedTypes; track $index) {
+                <option value="{{ item._id }}">{{ item.name }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mb-3">
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Seguro agrícola</label>
+            <div class="col-md-12">
+              <select
+                cSelect
+                formControlName="agricultural_insurance"
+                class="form-control"
+              >
+                <option value="true">SI</option>
+                <option value="false">NO</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Fecha de siembra</label>
+            <div class="col-md-12">
+              <input cFormControl type="date" formControlName="fecha_siembra" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Fecha cosecha</label>
+            <div class="col-md-12">
+              <input cFormControl type="date" formControlName="fecha_cosecha" />
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="form-group row mt-5">
+          <h5>Cultivos temporadas anteriores</h5>
+        </div>
+
+        <div class="form-group row my-3">
+          @if(previousSeasons.length>0){
+          <table cTable>
+            <thead>
+              <tr>
+                <th>Cultivo</th>
+                <th>Superficie</th>
+                <th>Rdto/ha</th>
+                <th style="text-align: right">$ venta</th>
+                <th>Destino producción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of previousSeasons; track $index) {
+              <tr>
+                <td></td>
+                <td>{{ item.total_ha }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              }
+            </tbody>
+          </table>
+          }@else{
+          <div class="text-center">
+            No existe información de otras temporadas
+          </div>
+          }
+        </div> -->
+      </c-tab-pane>
+
+      <!-- ##### AGUA ##### -->
+      <c-tab-pane class="p-3" formGroupName="water">
+        <div class="form-group row mb-3">
+          <div class="col-md-3">
+            <label class="col-md-12 form-control-label">Fuente de agua</label>
+            <div class="col-md-12">
+              <select
+                cSelect
+                formControlName="water_source"
+                class="form-control"
+              >
+                <option value="null">Selecciona una fuente</option>
+                <option value="Pozo">Pozo</option>
+                <option value="Rio">Rio</option>
+                <option value="Zanjón">Zanjón</option>
+                <option value="Canal">Canal</option>
+                <option value="Derrame">Derrame</option>
+                <option value="Vertiente">Vertiente</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-12 form-control-label">Tenencia</label>
+            <div class="col-md-12">
+              <select cSelect formControlName="possession" class="form-control">
+                <option value="null">Selecciona una tenencia</option>
+                <option value="Propia">Propia</option>
+                <option value="Inscrita">Inscrita</option>
+                <option value="No Inscrita">No Inscrita</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-12 form-control-label"
+              >Fuente de energía</label
+            >
+            <div class="col-md-12">
+              <select
+                cSelect
+                formControlName="power_source"
+                class="form-control"
+              >
+                <option value="null">Selecciona una fuente</option>
+                <option value="Motor bencinero">Motor bencinero</option>
+                <option value="Motor petrolero">Motor petrolero</option>
+                <option value="Motor electríco">Motor electríco</option>
+                <option value="Fotovoltaico">Fotovoltaico</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-12 form-control-label">Sistema de riego</label>
+            <div class="col-md-12">
+              <select
+                cSelect
+                formControlName="irrigation_system"
+                class="form-control"
+              >
+                <option value="null">Selecciona un sistema</option>
+                <option value="Surco">Surco</option>
+                <option value="Tendido">Tendido</option>
+                <option value="Aspersión">Aspersión</option>
+                <option value="Manga">Manga</option>
+                <option value="Goteo">Goteo</option>
+                <option value="Carrete">Carrete</option>
+                <option value="Pivote">Pivote</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-3">
+          <div class="col-md-12">
+            <label class="col-md-12 form-control-label">Observaciones</label>
+            <div class="col-md-12">
+              <textarea
+                type="text"
+                formControlName="obs"
+                class="md-textarea md-textarea-auto form-control"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </c-tab-pane>
+
+      <!-- ##### Maquinaria ##### -->
+      <c-tab-pane class="p-3">
+        <form [formGroup]="fieldsLabor" class="mb-4">
+          <div class="form-group row mb-3">
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Labor</label>
+              <div class="col-md-12">
+                <select
+                  cSelect
+                  formControlName="labor"
+                  class="form-control"
+                  (change)="selectWorkForMachines($event.target.value)"
+                >
+                  <option value="null">Selecciona una opción</option>
+                  @for (work of works; track work._id) {
+                  <option [value]="work._id">
+                    {{ work.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Maquinaria</label>
+              <div class="col-md-12">
+                <select
+                  cSelect
+                  formControlName="machinery"
+                  class="form-control"
+                >
+                  <option value="null">Selecciona una opción</option>
+                  @for (machine of machinesFiltered; track machine._id) {
+                  <option [value]="machine._id">
+                    {{ machine.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Época</label>
+              <div class="col-md-12">
+                <c-multi-select
+                  placeholder="Epoca"
+                  formControlName="epoca"
+                  multiple="true"
+                  visibleItems="4"
+                  [selectAll]="false"
+                >
+                  @for (month of months; track $index) {
+                  <c-multi-select-option [value]="month.name">
+                    {{ month.name }}
+                  </c-multi-select-option>
+                  }
+                </c-multi-select>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">Unidad</label>
+              <div class="col-md-12">
+                <input cFormControl type="text" formControlName="unit" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Cant. Total</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="amount" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Costo unitario</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="price" />
+              </div>
+            </div>
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">&nbsp;</label>
+              <div class="col-md-12">
+                <button
+                  cButton
+                  class="text-white"
+                  color="success"
+                  (click)="addFields()"
+                  [disabled]="!fieldsLabor.valid"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        @if(Labors.length>0){
+        <div class="table-responsive my-4">
+          <table bordered [cBorder]="1" borderColor="black" cTable>
+            <thead>
+              <tr>
+                <th>Maquinaria</th>
+                <th>Época</th>
+                <th>Cant. Total</th>
+                <th>Unidad</th>
+                <th>Precio</th>
+                <th>Costo/ha</th>
+                <th>Costo total</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (laborOfMachine of getKeys(machinesByLabor); track $index) {
+              <tr>
+                <td>
+                  <strong style="color: green">{{ laborOfMachine }} </strong>
+                </td>
+              </tr>
+              @for (labor of machinesByLabor[laborOfMachine]; track $index) {
+
+              <tr>
+                <td>{{ searchNameMachinery(labor.machinery) }}</td>
+                <td>{{ labor.epoca }}</td>
+                <td>{{ labor.amount }}</td>
+                <td>{{ labor.unit }}</td>
+                <td style="text-align: right" >{{ labor.price | currency:'CLP':'$':'1.1-1' }}</td>
+                <td style="text-align: right" >{{ labor.total_cost_ha | currency:'CLP':'$':'1.1-1' }}</td>
+                <td style="text-align: right" >{{ labor.total_cost | currency:'CLP':'$':'1.1-1' }}</td>
+                <td>
+                  <button
+                    class="me-1"
+                    size="sm"
+                    cButton
+                    shape="rounded-pill"
+                    color="danger"
+                    (click)="removeField($index)"
+                  >
+                    <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                  </button>
+                </td>
+              </tr>
+              } }
+            </tbody>
+          </table>
+        </div>
+        } @if (dataChartMachinery.labels ) {
+        <div style="display: flex; align-items: center; flex-direction: column">
+          <app-pie-chart
+            [data]="dataChartMachinery"
+            title="Costo/ha por labor"
+            type="pie"
+          ></app-pie-chart>
+        </div>
+        }
+      </c-tab-pane>
+
+      <!-- ##### Insumos ##### -->
+      <c-tab-pane class="p-3">
+        <form [formGroup]="fieldsProduct" class="mb-4">
+          <div class="form-group row mb-3">
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Categoría</label>
+              <div class="col-md-12">
+                <select
+                  cSelect
+                  formControlName="category"
+                  class="form-control"
+                  (change)="selectCategory($event.target.value)"
+                >
+                  <option value="null">Selecciona categoría</option>
+                  @for (category of categorys; track $index) {
+                  <option value="{{ category._id }}">
+                    {{ category.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Insumo</label>
+              <div class="col-md-12">
+                <select cSelect formControlName="product">
+                  <option value="null">Selecciona insumo</option>
+                  @for (product of productsFiltered; track $index) {
+                  <option value="{{ product._id }}">
+                    {{ product.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Época</label>
+              <div class="col-md-12">
+                <c-multi-select
+                  placeholder="Epoca"
+                  formControlName="epoca"
+                  multiple="true"
+                  visibleItems="4"
+                  [selectAll]="false"
+                >
+                  @for (month of months; track $index) {
+                  <c-multi-select-option [value]="month.name">
+                    {{ month.name }}
+                  </c-multi-select-option>
+                  }
+                </c-multi-select>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">Unidad</label>
+              <div class="col-md-12">
+                <input cFormControl type="text" formControlName="unit" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Cant. Total</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="amount" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Costo unitario</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="price" />
+              </div>
+            </div>
+
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">&nbsp;</label>
+              <div class="col-md-12">
+                <button
+                  cButton
+                  class="text-white"
+                  color="success"
+                  (click)="addProduct()"
+                  [disabled]="!fieldsProduct.valid"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="table-responsive">
+          @if(insumos.length>0){
+          <table bordered [cBorder]="1" borderColor="black" cTable>
+            <thead>
+              <tr>
+                <!-- <th>CATEGORÍA</th>  -->
+                <th>Insumo</th>
+                <th>Época</th>
+                <th>Cant. Total</th>
+                <th>Unidad</th>
+                <th>Costo</th>
+                <th>Costo/ha</th>
+                <th>Costo total</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (category of getKeys(insumosByCategory); track $index) {
+              <tr>
+                <td style="color: green">
+                  <strong> {{ category }}</strong>
+                </td>
+              </tr>
+
+              @for (insumo of insumosByCategory[category]; track $index) {
+              <tr>
+                <!-- <td>{{ searchNameCategory(insumo.category) }}</td> -->
+                <td>{{ searchNameProduct(insumo.product) }}</td>
+                <td>{{ insumo.epoca }}</td>
+                <td>{{ insumo.amount }}</td>
+                <td>{{ insumo.unit }}</td>
+                <td style="text-align: right" >{{ insumo.price | currency:'CLP':'$':'1.1-1' }}</td>
+                <td style="text-align: right" >{{ insumo.total_cost_ha | currency:'CLP':'$':'1.1-1' }}</td>
+                <td style="text-align: right" >{{ insumo.total_cost | currency:'CLP':'$':'1.1-1' }}</td>
+                <td>
+                  <button
+                    class="me-1"
+                    size="sm"
+                    cButton
+                    shape="rounded-pill"
+                    color="danger"
+                    (click)="removeProduct($index)"
+                  >
+                    <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                  </button>
+                </td>
+              </tr>
+              } }
+            </tbody>
+          </table>
+          }
+        </div>
+        @if (getKeys(dataChartInsumos).length != 0 ) {
+        <div style="display: flex; align-items: center; flex-direction: column">
+          <app-pie-chart
+            [data]="dataChartInsumos"
+            type="pie"
+            title="Costo/ha por categoría"
+          ></app-pie-chart>
+        </div>
+        }
+      </c-tab-pane>
+
+      <!-- ##### Mano de obra ##### -->
+      <c-tab-pane class="p-3">
+        <form [formGroup]="fieldsMO" class="mb-4">
+          <div class="form-group row mb-3">
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Labor</label>
+              <div class="col-md-12">
+                <select
+                  cSelect
+                  formControlName="labor"
+                  class="form-control"
+                  (change)="selectWorkForMO($event.target.value)"
+                >
+                  <option value="null">Selecciona una opción</option>
+                  @for (work of works; track work._id) {
+                  <option [value]="work._id">
+                    {{ work.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">M.O</label>
+              <div class="col-md-12">
+                <select cSelect formControlName="mo">
+                  <option value="null">Selecciona M.O</option>
+                  @for (mo of manoDeObrasFiltered; track $index) {
+                  <option value="{{ mo._id }}">
+                    {{ mo.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Época</label>
+              <div class="col-md-12">
+                <c-multi-select
+                  placeholder="Epoca"
+                  formControlName="epoca"
+                  multiple="true"
+                  visibleItems="4"
+                  [selectAll]="false"
+                >
+                  @for (month of months; track $index) {
+                  <c-multi-select-option [value]="month.name">
+                    {{ month.name }}
+                  </c-multi-select-option>
+                  }
+                </c-multi-select>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">Unidad</label>
+              <div class="col-md-12">
+                <input cFormControl type="text" formControlName="unit" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Cant. Total</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="amount" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Costo unitario</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="price" />
+              </div>
+            </div>
+
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">&nbsp;</label>
+              <div class="col-md-12">
+                <button
+                  cButton
+                  class="text-white"
+                  color="success"
+                  (click)="addMO()"
+                  [disabled]="!fieldsMO.valid"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="table-responsive">
+          @if(MOList.length>0){
+          <table bordered [cBorder]="1" borderColor="black" cTable>
+            <tbody>
+              <tr>
+                <th>M.O</th>
+                <th>Época</th>
+                <th>Cant. Total</th>
+                <th>Unidad</th>
+                <th>Costo</th>
+                <th>Costo/ha</th>
+                <th>Costo total</th>
+                <th>Acción</th>
+              </tr>
+              @for (work of works; track $index) { @if (hasForId(MOList,
+              work._id, 'labor')) {
+              <tr>
+                <td>
+                  <strong style="color: green">{{ work.name }} </strong>
+                </td>
+              </tr>
+
+              @for (mo of MOList; track $index) { 
+                @if (mo.labor == work._id)
+              {
+              <tr>
+                <td>{{ searchNameMO(mo.mo) }}</td>
+                <td>{{ mo.epoca }}</td>
+                <td>{{ mo.amount }}</td>
+                <td>{{ mo.unit }}</td>
+                <td style="text-align: right" >{{ mo.price | currency:'CLP':'$':'1.1-1' }}</td>
+                <td style="text-align: right" >{{ mo.total_cost_ha | currency:'CLP':'$':'1.1-1'}}</td>
+                <td style="text-align: right" >{{ mo.total_cost | currency:'CLP':'$':'1.1-1'}}</td>
+                <td style="text-align: center">
+                  <button
+                    class="me-1"
+                    size="sm"
+                    cButton
+                    shape="rounded-pill"
+                    color="danger"
+                    (click)="removeMO($index)"
+                  >
+                    <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                  </button>
+                </td>
+              </tr>
+              } } } }
+            </tbody>
+          </table>
+          }
+        </div>
+        @if (getKeys(dataChartMO).length != 0 ) {
+        <div style="display: flex; align-items: center; flex-direction: column">
+          <app-pie-chart
+            [data]="dataChartMO"
+            type="pie"
+            title="Costo/ha por M.O"
+          ></app-pie-chart>
+        </div>
+        }
+      </c-tab-pane>
+      <!-- ##### Otros costos ##### -->
+      <c-tab-pane class="p-3">
+        <form [formGroup]="formOtrosCostos" class="mb-4">
+          <div class="form-group row mb-3">
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Labor</label>
+              <div class="col-md-12">
+                <select
+                  cSelect
+                  formControlName="labor"
+                  class="form-control"
+                  (change)="selectWorkForOtrosCostos($event.target.value)"
+                >
+                  <option value="null">Selecciona una opción</option>
+                  @for (work of works; track work._id) {
+                  <option [value]="work._id">
+                    {{ work.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">O.C</label>
+              <div class="col-md-12">
+                <select
+                  cSelect
+                  formControlName="otro_costo"
+                  class="form-control"
+                >
+                  <option value="null">Selecciona una opción</option>
+                  @for (oc of otrosCostosFiltrado; track oc._id) {
+                  <option [value]="oc._id">
+                    {{ oc.name }}
+                  </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Época</label>
+              <div class="col-md-12">
+                <c-multi-select
+                  placeholder="Epoca"
+                  formControlName="epoca"
+                  multiple="true"
+                  visibleItems="4"
+                  [selectAll]="false"
+                >
+                  @for (month of months; track $index) {
+                  <c-multi-select-option [value]="month.name">
+                    {{ month.name }}
+                  </c-multi-select-option>
+                  }
+                </c-multi-select>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">Unidad</label>
+              <div class="col-md-12">
+                <input cFormControl type="text" formControlName="unit" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Cant. Total</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="amount" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="col-md-12 form-control-label">Costo unitario</label>
+              <div class="col-md-12">
+                <input cFormControl type="number" formControlName="price" />
+              </div>
+            </div>
+            <div class="col-md-1">
+              <label class="col-md-12 form-control-label">&nbsp;</label>
+              <div class="col-md-12">
+                <button
+                  cButton
+                  class="text-white"
+                  color="success"
+                  (click)="addValueTablaOtrosCostos()"
+                  [disabled]="!formOtrosCostos.valid"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive my-4">
+          @if(ValuesTableOtrosCostos.length>0){
+          <table bordered [cBorder]="1" borderColor="black" cTable>
+            <tbody>
+              <tr>
+                <th>O.C</th>
+                <th>Época</th>
+                <th>Cant. Total</th>
+                <th>Unidad</th>
+                <th>Precio</th>
+                <th>Costo/ha</th>
+                <th>Costo total</th>
+                <th>Acción</th>
+              </tr>
+              @for (laborOfOtrosCostos of getKeys(otrosCostosByLabor); track
+              $index) {
+              <tr>
+                <td>
+                  <strong style="color: green"
+                    >{{ laborOfOtrosCostos }}
+                  </strong>
+                </td>
+              </tr>
+
+              @for (oc of otrosCostosByLabor[laborOfOtrosCostos]; track $index)
+              {
+
+              <tr>
+                <td>{{ searchNameOtroCosto(oc.otro_costo) }}</td>
+                <td>{{ oc.epoca }}</td>
+                <td>{{ oc.amount }}</td>
+                <td>{{ oc.unit }}</td>
+                <td style="text-align: right" >{{ oc.price | currency:'CLP':'$':'1.1-1' }}</td>
+                <td style="text-align: right" >{{ oc.total_cost_ha| currency:'CLP':'$':'1.1-1' }}</td>
+                <td style="text-align: right" >{{ oc.total_cost| currency:'CLP':'$':'1.1-1'  }}</td>
+                <td style="text-align: center" >
+                  <button
+                    class="me-1"
+                    size="sm"
+                    cButton
+                    shape="rounded-pill"
+                    color="danger"
+                    (click)="removeValueTableOtrosCostos($index)"
+                  >
+                    <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                  </button>
+                </td>
+              </tr>
+              } }
+            </tbody>
+          </table>
+          }
+        </div>
+        @if (getKeys(dataChartOC).length != 0 ) {
+        <div style="display: flex; align-items: center; flex-direction: column">
+          <app-pie-chart
+            [data]="dataChartOC"
+            type="pie"
+            title="Costo/ha por labor"
+          ></app-pie-chart>
+        </div>
+        }
+      </c-tab-pane>
+      <!-- ##### guia analisis ##### -->
+      <c-tab-pane class="p-3">
+        <form [formGroup]="formGA">
+          <c-row>
+            <c-col xs="auto">
+              <div class="mb-3">
+                <label cLabel for="industria">Industria</label>
+                <input
+                  cFormControl
+                  formControlName="industria"
+                  id="industria"
+                  placeholder="Industria"
+                  type="text"
+                />
+              </div>
+            </c-col>
+            <c-col xs="auto">
+              <div class="mb-3">
+                <label cLabel for="pesoBruto">Peso bruto</label>
+                <input
+                  cFormControl
+                  formControlName="pesoBruto"
+                  id="pesoBruto"
+                  placeholder="Peso bruto"
+                  type="number"
+                  min="0"
+                />
+              </div>
+            </c-col>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="limpioSeco">Limpio/Seco</label>
+                <input
+                  cFormControl
+                  formControlName="limpioSeco"
+                  id="limpioSeco"
+                  placeholder="Limpio/Seco"
+                  type="number"
+                  min="0"
+                />
+              </div>
+            </c-col>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="precioVenta">Precio venta</label>
+                <input
+                  cFormControl
+                  formControlName="precioVenta"
+                  id="precioVenta"
+                  placeholder="Precio venta"
+                  type="number"
+                  min="0"
+                />
+              </div>
+            </c-col>
+          </c-row>
+          <c-row>
+            <c-col xs="auto">
+              <div class="mb-3">
+                <label cLabel for="guiaFile"> Cargar Guía Análisis</label>
+                <input
+                  cFormControl
+                  id="guiaFile"
+                  type="file"
+                  (change)="uploadGuiaAnalisis($event)"
+                />
+              </div>
+            </c-col>
+            <c-col xs="auto">
+              <div class="mb-3">
+                <label cLabel > Cargar Cálculo índice de adopción 1</label>
+                <input
+                  cFormControl
+                  type="file"
+                  (change)="uploadAdopcion1($event)"
+                />
+              </div>
+            </c-col>
+            <c-col xs="auto">
+              <div class="mb-3">
+                <label cLabel > Cargar Cálculo índice de adopción 2</label>
+                <input
+                  cFormControl
+                  type="file"
+                  (change)="uploadAdopcion2($event)"
+                />
+              </div>
+            </c-col>
+            <c-col xs="auto">
+              <div class="mb-3 mt-4">
+                <button
+                  cButton
+                  color="success"
+                  cTextColor="white"
+                  (click)="saveFormGA()"
+                  [disabled]="!formGA.valid"
+                >
+                  +
+                </button>
+              </div>
+            </c-col>
+          </c-row>
+        </form>
+        <div class="">
+          @if(getKeys(dataGA).length>0){
+          <table
+            bordered
+            [cBorder]="1"
+            borderColor="black"
+            cTable
+            [responsive]="true"
+          >
+            <thead>
+              <tr>
+                <th>Industria</th>
+                <th>Limpio seco</th>
+                <th>Limpia seco/ha</th>
+                <th>Peso bruto</th>
+                <th>Peso bruto/ha</th>
+                <th>Precio venta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ dataGA.industria }}</td>
+                <td>{{ dataGA.limpioSeco }}</td>
+                <td>{{ dataGA.limpioSecoHA }}</td>
+                <td>{{ dataGA.pesoBruto }}</td>
+                <td>{{ dataGA.pesoBrutoHA }}</td>
+                <td style="text-align: right" >{{ dataGA.precioVenta | currency:'CLP':'$':'1.1-1' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          }
+        </div>
+      </c-tab-pane>
+    </c-tab-content>
+    }
+    <div *ngIf="formError" class="alert alert-danger mb-3">
+      <p *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="onSubmit()"
+          [disabled]="!agregarForm.valid"
+        >
+          Guardar
+        </button>
+        <!--  -->
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="secondary"
+          (click)="activeModal.dismiss('Cross click')"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<toaster-container [toasterconfig]="config"></toaster-container>

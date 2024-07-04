@@ -1,0 +1,30 @@
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body p-2 p-md-4">
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/semillas/listado']"><i class="nav-icon fas fa-file-alt"></i> Semillas </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/semillas/tipos']"><i class="nav-icon fa fa-university"></i> Tipo de semillas </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/semillas/cultivos']"><i class="nav-icon fa fa-university"></i> Tipo de cultivos </a>
+                </li>
+                
+                
+            </ul>
+            <div class="p-md-2">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    

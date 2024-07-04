@@ -1,0 +1,25 @@
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body p-2 p-md-4">
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/productos/listado']"><i class="nav-icon fas fa-file-alt"></i> Insumos </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/productos/categorias']"><i class="nav-icon fa fa-university"></i> Categorías </a>
+                </li>
+                
+            </ul>
+            <div class="p-md-2">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    

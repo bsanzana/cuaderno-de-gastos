@@ -1,0 +1,125 @@
+<div class="modal-header bg-info text-white">
+    <h5 class="modal-title">Agregar nuevo usuario</h5>
+    <button type="button" class="btn-close" aria-label="Close"
+     (click)="activeModal.dismiss('Cross click')">
+    </button>
+  </div>
+  
+  <div class="modal-body">
+      
+      <form [formGroup]="agregarForm" (ngSubmit)="onSubmit()">
+  
+        <div class="form-group row mb-3">
+          <div class="col-md-7">
+            <label class="col-md-12 form-control-label" for="rut">RUT</label>
+            <div class="col-md-12">
+              <input 
+                (input)="inputEvent($event)"
+                type="text" 
+                cFormControl
+                appUppercase
+                formControlName="rut"
+                [ngClass]="{
+                  'is-invalid': agregarForm.controls['rut'].errors && !agregarForm.controls['rut'].pristine,
+                  'is-valid'  : agregarForm.controls['rut'].valid
+                }">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="col-md-12 form-control-label" for="active">Autorización</label>
+            <div class="col-md-12">
+              <ui-switch 
+                formControlName="active"
+                size="small"
+              ></ui-switch>
+            </div>
+          </div>
+  
+        </div>
+  
+        <div class="form-group row mb-3">
+          <div class="col-md-5">
+            <label class="col-md-12 form-control-label" for="name">Nombre</label>
+            <div class="col-md-12">
+              <input 
+                type="text" 
+                appUppercase
+                cFormControl
+                formControlName="name"
+                appUppercase
+                [ngClass]="{
+                  'is-invalid': agregarForm.controls['name'].errors && !agregarForm.controls['name'].pristine,
+                  'is-valid'  : agregarForm.controls['name'].valid
+                }">
+            </div>
+          </div>
+          <div class="col-md-7">
+            <label class="col-md-12 form-control-label" for="lastname">Apellidos</label>
+            <div class="col-md-12">
+              <input 
+                type="text" 
+                appUppercase
+                cFormControl 
+                formControlName="lastname"
+                [ngClass]="{
+                  'is-invalid': agregarForm.controls['lastname'].errors && !agregarForm.controls['lastname'].pristine,
+                  'is-valid'  : agregarForm.controls['lastname'].valid
+                }">
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-3">
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="phone">Teléfono</label>
+            <div class="col-md-12">
+              <input 
+                type="text" 
+                cFormControl
+                formControlName="phone"
+                [ngClass]="{
+                  'is-invalid': agregarForm.controls['phone'].errors && !agregarForm.controls['phone'].pristine,
+                  'is-valid'  : agregarForm.controls['phone'].valid
+                }">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="col-md-12 form-control-label" for="nombre">Mail</label>
+            <div class="col-md-12">
+              <input 
+                type="text" 
+                cFormControl
+                formControlName="email"
+                [ngClass]="{
+                  'is-invalid': agregarForm.controls['email'].errors && !agregarForm.controls['email'].pristine,
+                  'is-valid'  : agregarForm.controls['email'].valid
+                }">
+            </div>
+          </div>
+        </div>  
+  
+
+            
+        </form>
+  
+  </div>
+  
+  
+  <div class="modal-footer">
+    <div class="input-group mb-3">
+      <div class="col-md-6 col-12">
+        <div class="d-grid gap-2 me-1">
+          <button  cButton class="text-white" color="info" (click)="onSubmit()" [disabled]="!agregarForm.valid">Guardar</button>
+        </div>
+      </div>
+  
+      <div class="col-md-6 col-12">
+        <div class="d-grid gap-2 me-1">
+          <button  cButton class="text-white" color="secondary" (click)="activeModal.dismiss('Cross click')">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <toaster-container [toasterconfig]="config"></toaster-container>

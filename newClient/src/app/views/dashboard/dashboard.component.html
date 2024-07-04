@@ -1,0 +1,115 @@
+<c-row class="mt-4">
+  <c-col xs="auto">
+    <c-card class="mb-4">
+      <c-card-header>Filtros para los cuadernos de campo</c-card-header>
+      <c-card-body>
+        <form (submit)="filtro()">
+          <c-row class="mt-4">
+            <c-col>
+              <label cLabel>Selecciona una temporada</label>
+              <select
+                name="season"
+                cSelect
+                [(ngModel)]="searchForm['informacion_del_campo.season']"
+              >
+                <option value="">Todas las temporadas</option>
+                @for (season of seasons; track $index) {
+                <option value="{{ season._id }}">{{ season.name }}</option>
+                }
+              </select>
+            </c-col>
+            <c-col>
+              <label cLabel>Selecciona un asesor</label>
+              <select
+                name="advisor"
+                cSelect
+                [(ngModel)]="searchForm['advisor']"
+              >
+                <option value="">Todas los asesores</option>
+                @for (user of users; track $index) {
+                <option value="{{ user._id }}">{{ user.name }}</option>
+                }
+              </select>
+            </c-col>
+
+            <c-row>
+              <c-col>
+                <button
+                  class="mt-4 text-white"
+                  cButton
+                  color="info"
+                  type="submit"
+                >
+                  Filtrar
+                </button>
+              </c-col>
+            </c-row>
+          </c-row>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<c-row class="mt-4">
+  <c-col xs="auto">
+    <c-card class="mb-4">
+      <c-card-header>Gráfico de Géneros</c-card-header>
+      <c-card-body>
+        <app-pie-chart
+          [data]="chartGender"
+          type="pie"
+          title="Proporción de géneros por cuadernos de campo"
+          [legend]="true"
+        ></app-pie-chart
+      ></c-card-body>
+    </c-card>
+  </c-col>
+
+  <c-col xs="auto">
+    <c-card class="mb-4">
+      <c-card-header>Gráfico de tipos de tenencia</c-card-header>
+      <c-card-body>
+        <app-pie-chart
+          [data]="chartPossession"
+          type="pie"
+          title="Proporción de tipos de tenencia por cuadernos de campo"
+          [legend]="true"
+        ></app-pie-chart
+      ></c-card-body>
+    </c-card>
+  </c-col>
+
+  <c-col xs="auto">
+    <c-card class="mb-4">
+      <c-card-header>Gráfico de tipos de cultivo</c-card-header>
+      <c-card-body>
+        <app-pie-chart
+          [data]="chartCropType"
+          type="pie"
+          title="Proporción de tipos de cultivos por cuadernos de campo"
+          [legend]="true"
+        ></app-pie-chart
+      ></c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<c-row>
+  <c-col>
+    <c-card class="mb-4">
+      <c-card-header>Gráfico de distribución de edades</c-card-header>
+      <c-card-body class="d-flex justify-content-center align-items-center">
+        <app-bar-chart
+          style="width: 100%; height: 100%"
+          [data]="chartAges"
+          type="bar"
+          [legend]="false"
+          title="Distribución de productores por rango de edad"
+          xAxisLabel="Rango de edades"
+          yAxisLabel="Cantidad de productores"
+        ></app-bar-chart
+      ></c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

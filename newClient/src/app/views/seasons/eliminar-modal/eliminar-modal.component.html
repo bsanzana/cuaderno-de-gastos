@@ -1,0 +1,34 @@
+<div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">Eliminar una temporada</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="activeModal.dismiss()"
+    ></button>
+  </div>
+  
+  <div class="modal-body">
+    <p cCardText>
+        ¿Estás seguro de eliminar la temporada <strong>{{this.nameSeason}}</strong>?
+      </p>  
+  </div>
+  
+  <div class="modal-footer">
+    <div class="input-group mb-3">
+      <div class="col-md-6 col-12">
+        <div class="d-grid gap-2 me-1">
+          <button cButton class="text-white" color="danger" (click)="onSubmit()">
+            Confirmar
+          </button>
+        </div>
+      </div>
+  
+      <div class="col-md-6 col-12">
+        <div class="d-grid gap-2 me-1">
+          <button cButton class="text-white" color="secondary" (click)="activeModal.dismiss()" >Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <toaster-container></toaster-container>

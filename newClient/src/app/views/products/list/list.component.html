@@ -1,0 +1,79 @@
+<c-row ngPreserveWhitespaces>
+  <div class="text-end">
+    <button
+      cButton
+      color="info"
+      shape="rounded-pill"
+      class="text-white my-3"
+      (click)="addProduct()"
+    >
+      Nuevo producto
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table [hover]="false" cTable>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>NOMBRE</th>
+          <th>CATEGORÍA</th>
+          <th class="text-center">¿ACTIVO?</th>
+          <th class="text-center">ACCIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products; track product; let i = $index) {
+        <tr>
+          <td>{{ i + 1 + (page - 1) * pageSize }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.category?.name }}</td>
+          @if (product.active) {
+          <td class="text-center">
+            <fa-icon class="text-success" size="2x" [icon]="faCheck"></fa-icon>
+          </td>
+          }@else {
+          <td class="text-center">
+            <fa-icon class="text-danger" size="2x" [icon]="faXmark"></fa-icon>
+          </td>
+          }
+          <td class="text-center">
+            <c-button-group aria-label="Todos" role="group">
+              <button
+                class="me-1"
+                size="sm"
+                cButton
+                shape="rounded-pill"
+                color="info"
+                (click)="editProduct(product)"
+              >
+                <fa-icon class="text-white" [icon]="faPenToSquare"></fa-icon>
+              </button>
+
+              <!-- <button class="me-1" size="sm" cButton shape="rounded-pill" color="info" (click)="removeProduct(product)">
+                        <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                      </button> -->
+            </c-button-group>
+            <!-- <button (click)="openModal('', 'modalEdit', companyGroup._id)" class="btn btn-warning mr-1"><i class="fa fa-pencil"></i> Editar</button>
+                  <button class="btn btn-danger" (click)="removeCompanyGroup(companyGroup._id)"><i class="fa fa-trash"></i> Eliminar</button> -->
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</c-row>
+
+<c-row class="mt-3">
+  <ngb-pagination
+    [collectionSize]="total"
+    [page]="page"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+    aria-label="Pagination"
+    [maxSize]="5"
+    [rotate]="true"
+  ></ngb-pagination>
+  <p>Total: {{ total }}</p>
+</c-row>
+<toaster-container></toaster-container>

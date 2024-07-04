@@ -1,0 +1,76 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Agregar nuevo grupo de productores</h5>
+  <button type="button" class="btn-close" aria-label="Close"
+   (click)="activeModal.dismiss('Cross click')">
+  </button>
+</div>
+
+<div class="modal-body">
+    
+    <form [formGroup]="agregarForm">
+
+        <div class="form-group row mb-3">
+            <label class="col-md-3 form-control-label" for="name-input">Nombre</label>
+            <div class="col-md-9">
+              <input
+                cFormControl
+                formControlName="name"
+                appUppercase
+                placeholder="Nombre del producto"
+                [ngClass]="{
+                  'is-invalid': agregarForm.controls['name'].errors && !agregarForm.controls['name'].pristine,
+                  'is-valid'  : agregarForm.controls['name'].valid
+                }"
+              >
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <label class="col-md-3 form-control-label" for="advisors-input">Asesor</label>
+            <div class="col-md-9">
+              <c-multi-select 
+                placeholder="Asigne el asesor"
+                selectAll="false"
+                selectAllLabel = "Seleccionar todos"
+                multiple
+                cSelect
+                formControlName="advisors"
+                >
+                @for (usuario of usuarios; track usuario._id) {
+                  <c-multi-select-option
+                    [value]="usuario._id"
+                  >
+                    {{ usuario.name }}
+                  </c-multi-select-option>
+                }
+              </c-multi-select>
+            </div>
+        </div>
+
+        
+        <div *ngIf="formError" class="alert alert-danger mb-3">
+            <p *ngIf="errorMessage">
+              {{errorMessage}}
+            </p>
+        </div>
+          
+      </form>
+
+</div>
+
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button  cButton class="text-white" color="info" (click)="onSubmit()" [disabled]="!agregarForm.valid">Guardar</button>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button  cButton class="text-white" color="secondary" (click)="activeModal.dismiss('Cross click')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

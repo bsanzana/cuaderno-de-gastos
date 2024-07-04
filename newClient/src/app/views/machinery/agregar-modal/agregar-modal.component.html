@@ -1,0 +1,87 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">Agregar nueva maquinaria</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <form cForm [formGroup]="agregarForm" (ngSubmit)="onSubmit()">
+    <c-row>
+      <c-col xs="6">
+        <label cLabel for="name">Nombre de máquina</label>
+        <input
+          cFormControl
+          formControlName="name"
+          id="nameMachinery"
+          type="input"
+          placeholder="Nombre de máquina"
+          [ngClass]="{
+            'is-invalid': !agregarForm.controls['name'].valid,
+            'is-valid': agregarForm.controls['name'].valid
+          }"
+        />
+      </c-col>
+      <c-col xs="4"
+        ><div class="">
+          <label cLabel for="active">¿Activo?</label><br />
+          <ui-switch id="active" formControlName="active"></ui-switch></div
+      ></c-col>
+    </c-row>
+    <c-row>
+      <c-col xs="6">
+        <label cLabel for="">Tipo de labor</label>
+        <select
+          formControlName="labor"
+          cSelect
+          [ngClass]="{
+            'is-invalid': agregarForm.controls['labor'].invalid,
+            'is-valid': agregarForm.controls['labor'].valid
+          }"
+        >
+          <option [value]="null" disabled [selected]>
+            Selecciona un labor
+          </option>
+          @for (work of works; track work._id) {
+          <option value="{{ work._id }}">{{ work.name }}</option>
+          }
+        </select>
+      </c-col>
+    </c-row>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="input-group mb-3">
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="info"
+          (click)="onSubmit()"
+          [disabled]="!agregarForm.valid"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+      <div class="d-grid gap-2 me-1">
+        <button
+          cButton
+          class="text-white"
+          color="secondary"
+          (click)="activeModal.dismiss()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<toaster-container></toaster-container>

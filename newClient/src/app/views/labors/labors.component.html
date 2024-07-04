@@ -1,0 +1,101 @@
+<c-row ngPreserveWhitespaces>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <div class="text-end">
+          <button
+            cButton
+            color="info"
+            shape="rounded-pill"
+            class="text-white my-2"
+            (click)="addLabor()"
+          >
+            Nueva labor
+          </button>
+        </div>
+      </c-card-header>
+      <c-card-body>
+        <div class="table-responsive">
+          <table [hover]="false" cTable>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>NOMBRE</th>
+                <th class="text-center">¿ACTIVO?</th>
+                <th class="text-center">ACCIÓN</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (work of works; track work; let i = $index) {
+              <tr>
+                <td>{{ i + 1 + (page - 1) * pageSize }}</td>
+                <td>{{ work.name }}</td>
+                @if (work.active) {
+                <td class="text-center">
+                  <fa-icon
+                    class="text-success"
+                    size="2x"
+                    [icon]="faCheck"
+                  ></fa-icon>
+                </td>
+                }@else {
+                <td class="text-center">
+                  <fa-icon
+                    class="text-danger"
+                    size="2x"
+                    [icon]="faXmark"
+                  ></fa-icon>
+                </td>
+                }
+                <td class="text-center">
+                  <c-button-group aria-label="Todos" role="group">
+                    <button
+                      class="me-1"
+                      size="sm"
+                      cButton
+                      shape="rounded-pill"
+                      color="info"
+                      (click)="editLabor(work)"
+                    >
+                      <fa-icon
+                        class="text-white"
+                        [icon]="faPenToSquare"
+                      ></fa-icon>
+                    </button>
+                    <!-- 
+                    <button
+                      class="me-1"
+                      size="sm"
+                      cButton
+                      shape="rounded-pill"
+                      color="info"
+                      (click)="removeLabor(work)"
+                    >
+                      <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+                    </button> -->
+                  </c-button-group>
+                </td>
+              </tr>
+
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <c-row class="mt-3">
+          <ngb-pagination
+            [collectionSize]="total"
+            [page]="page"
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)"
+            aria-label="Pagination"
+            [maxSize]="5"
+            [rotate]="true"
+          ></ngb-pagination>
+          <p>Total: {{ total }}</p>
+        </c-row>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+<toaster-container></toaster-container>

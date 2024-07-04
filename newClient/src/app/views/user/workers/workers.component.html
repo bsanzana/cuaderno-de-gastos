@@ -1,0 +1,96 @@
+<c-row ngPreserveWhitespaces>
+
+  <div class="text-end">
+    <button cButton color="info" shape="rounded-pill" class="text-white my-3" (click)="newOpenModal()">Nuevo usuario</button>
+  </div>
+
+  <div class="table-responsive mt-3">
+    <table [hover]="false" cTable>
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>IMAGEN</th>
+        <th>RUT</th>
+        <th>NOMBRE</th>
+        <th>ROL</th>
+        <th>¿ACTIVO?</th>
+        <!-- <th>¿CONTACTO?</th> -->
+        <th>ESPECIALISTAS</th>
+        <th style="text-align:right">ACCIÓN</th>
+      </tr>
+      </thead>
+      <tbody>
+
+        @for (user of users; track user; let i = $index) {
+          <tr class="align-middle">
+            <td>{{i + 1 + ((page - 1) * pageSize)}}</td>
+            <td>
+              @if (user.avatar == null) {
+                   <c-avatar
+                    shape="rounded-1"
+                    size="md"
+                    src="./assets/images/blank-profile-picture.png"
+                  />
+              }@else {
+                  <c-avatar
+                    shape="rounded-1"
+                    size="md"
+                    src="{{ ENDPOINT_USER_IMAGE }}{{ user.avatar }}"
+                  />
+              }
+              
+              
+            </td>
+            <th>{{user.rut}}</th>
+            <td>{{user.name}} {{user.lastname}}</td>
+            <td>{{user.role == 'adviser' ? 'Asesor' : user.role == 'admin' ? "Administrador" : 'SIN ROL'  }}</td> <!-- roleTranslate -->
+            <td>{{user.active ? 'Sí' : 'No'}}</td>
+            <!-- <td>{{user.show ? 'Sí' : 'No'}}</td> -->
+            <td>
+              @for (item of user.specialists; track $index) {
+                <small>
+                  <div>{{item.name}} {{item.lastname}}</div>
+                </small>
+              }
+            </td>
+            <td align="right">
+              <c-button-group aria-label="Todos" role="group">
+                
+                @if (user._id == userActual.id || userActual.role == 'admin') {
+
+                  <button class="me-1" size="sm" cButton shape="rounded-pill" color="info" (click)="editModal(user._id)">
+                    <fa-icon class="text-white" [icon]="faPenToSquare"></fa-icon>
+                  </button>
+  
+                  <button class="me-1" size="sm" cButton shape="rounded-pill" color="info" (click)="passwordModal(user._id)">
+                    <fa-icon class="text-white" [icon]="faLock"></fa-icon>
+                  </button>
+
+                }
+
+              </c-button-group>
+
+            </td>
+          </tr>
+        }
+      
+      </tbody>
+    </table>
+  </div>
+
+</c-row>
+
+<c-row class="mt-3">
+  <ngb-pagination
+  [collectionSize]="total"
+  [page]="page"
+  [pageSize]="pageSize"
+  (pageChange)="onPageChange($event)"
+  aria-label="Pagination"
+  [maxSize]="5"
+  [rotate]="true"
+  ></ngb-pagination>
+  <p>Total: {{ total }}</p>
+</c-row>
+
+<toaster-container [toasterconfig]="config"></toaster-container>

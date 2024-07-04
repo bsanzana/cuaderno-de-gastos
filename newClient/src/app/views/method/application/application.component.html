@@ -1,0 +1,80 @@
+<c-row ngPreserveWhitespaces>
+  <div class="text-end">
+    <button
+      cButton
+      color="info"
+      shape="rounded-pill"
+      class="text-white my-3"
+      (click)="addApplication()"
+    >
+      Agregar otro costo
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table [hover]="false" cTable>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>NOMBRE</th>
+          <th class="text-center">LABOR</th>
+          <th class="text-center">¿ACTIVO?</th>
+          <th class="text-center">ACCIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (applicationMethod of applicationMethods; track applicationMethod;
+        let i = $index) {
+        <tr>
+          <td>{{ i + 1 + (page - 1) * pageSize }}</td>
+          <td>{{ applicationMethod.name }}</td>
+          <td>{{ applicationMethod.labor?.name}}</td>
+          @if (applicationMethod.active) {
+          <td class="text-center"><fa-icon class="text-success" size='2x' [icon]="faCheck"></fa-icon></td>
+          }@else {
+          <td class="text-center" ><fa-icon class="text-danger" size='2x' [icon]="faXmark"></fa-icon></td>
+          }
+
+          <td class="text-center">
+            <button
+              class="me-1"
+              size="sm"
+              cButton
+              shape="rounded-pill"
+              color="info"
+              (click)="editApplication(applicationMethod)"
+            >
+              <fa-icon class="text-white" [icon]="faPenToSquare"></fa-icon>
+            </button>
+
+            <!-- <button
+              class="me-1"
+              size="sm"
+              cButton
+              shape="rounded-pill"
+              color="info"
+              (click)="removeApplication(applicationMethod)"
+            >
+              <fa-icon class="text-white" [icon]="faTrash"></fa-icon>
+            </button> -->
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</c-row>
+
+<c-row class="mt-3">
+  <ngb-pagination
+    [collectionSize]="total"
+    [page]="page"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+    aria-label="Pagination"
+    [maxSize]="5"
+    [rotate]="true"
+  ></ngb-pagination>
+  <p>Total: {{ total }}</p>
+</c-row>
+<toaster-container></toaster-container>

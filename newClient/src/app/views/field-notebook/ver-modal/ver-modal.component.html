@@ -1,0 +1,556 @@
+<div class="modal-header bg-info text-white">
+  <h5 class="modal-title">
+    Cuaderno de
+    <strong> {{ cuaderno.informacion_del_campo?.company.name }} </strong>
+  </h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <div class="form-group row mb-3">
+    <div class="col-md-4">
+      <label class="col-md-12 form-control-label" for="company-input"
+        >Temporada</label
+      >
+      <p>
+        <strong>{{ cuaderno.informacion_del_campo.season?.name }} </strong>
+      </p>
+    </div>
+
+    <div class="col-md-5">
+      <label class="col-md-12 form-control-label" for="company-input"
+        >Productor</label
+      >
+      <p>
+        <strong>{{ cuaderno.informacion_del_campo.company?.name }} </strong>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <label class="col-md-12 form-control-label" for="possession"
+        >Identificación del predio</label
+      >
+      @for (campos of cuaderno.informacion_del_campo.company?.fields; track
+      $index) { @if (campos._id == cuaderno.informacion_del_campo.company_field)
+      {
+      <p>
+        <strong>{{ campos.name }} </strong>
+      </p>
+      } }
+    </div>
+  </div>
+
+  <h3 class="pb-2 my-4 border-bottom">Información del campo</h3>
+
+  <div class="form-group row mb-3">
+    <div class="col-md-3">
+      <label class="col-md-12 form-control-label">Superficie total</label>
+      <p>
+        <strong>{{ cuaderno.informacion_del_campo?.total_ha }} </strong>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <label class="col-md-12 form-control-label">Análisis de suelo</label>
+      @if (cuaderno.informacion_del_campo?.soil_analysis) {
+      <fa-icon class="text-success" size="2x" [icon]="faCheck"></fa-icon>
+      }@else {
+      <fa-icon class="text-danger" size="2x" [icon]="faXmark"></fa-icon>
+      }
+    </div>
+    <div class="col-md-3">
+      <label class="col-md-12 form-control-label">Superficie cultivada</label>
+      <p>
+        <strong>{{ cuaderno.informacion_del_campo?.cultivated_area }} </strong>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <label class="col-md-12 form-control-label">Tenencia</label>
+      <p>
+        <strong>{{ cuaderno.informacion_del_campo?.possession }} </strong>
+      </p>
+    </div>
+  </div>
+  @if (cuaderno.pathAnalisisSuelo) {
+  <div class="col-md-4 mb-3">
+    <c-card>
+      <c-card-body>
+        <label cLabel style="margin-right: 0.5rem"
+          >Archivo análisis de suelo
+        </label>
+        <app-btn-descargar [cuaderno]="cuaderno" typeFile="pathAnalisisSuelo" />
+      </c-card-body>
+    </c-card>
+  </div>
+  } @if(cuaderno.informacion_del_campo.possession == 'Arriendo'){
+  <div class="mb-3">
+    <c-card>
+      <c-card-body>
+        <div class="form-group row mb-3">
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label"
+              >Costo del arriendo</label
+            >
+            <p>
+              <strong
+                >{{ cuaderno.informacion_del_campo.possession_rent?.cost }}
+              </strong>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Fecha Inicio</label>
+            <p>
+              <strong
+                >{{
+                  cuaderno.informacion_del_campo.possession_rent?.start_date
+                }}
+              </strong>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <label class="col-md-12 form-control-label">Fecha Termino</label>
+            <p>
+              <strong
+                >{{ cuaderno.informacion_del_campo.possession_rent?.end_date }}
+              </strong>
+            </p>
+          </div>
+        </div>
+      </c-card-body>
+    </c-card>
+  </div>
+  }
+
+  <c-nav variant="tabs" id="navForms">
+    <a
+      [cTabContent]="tabContent"
+      [routerLink]
+      [tabPaneIdx]="0"
+      cNavLink
+      [active]="true"
+      >Cultivo</a
+    >
+    <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="1" cNavLink
+      >Agua</a
+    >
+    <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="2" cNavLink
+      >Maquinaria
+    </a>
+    <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="3" cNavLink
+      >Insumos</a
+    >
+    <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="4" cNavLink
+      >Mano de obra</a
+    >
+    <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="5" cNavLink
+      >Otros costos</a
+    >
+    <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="6" cNavLink
+      >Guía Análisis</a
+    >
+  </c-nav>
+
+  <c-tab-content #tabContent="cTabContent">
+    <c-tab-pane class="p-3">
+      <div class="form-group row mb-3">
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label">Cultivo</label>
+          <p>
+            <strong
+              >{{ cuaderno.informacion_del_campo.crop.type_crop?.name }}
+            </strong>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label">Variedad</label>
+          <p>
+            <strong
+              >{{ cuaderno.informacion_del_campo.crop.variety?.name }}
+            </strong>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label">Tipo</label>
+          <p>
+            <strong
+              >{{ cuaderno.informacion_del_campo.crop.seed_type?.name }}
+            </strong>
+          </p>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label">Seguro agrícola</label>
+          @if (cuaderno.informacion_del_campo.crop?.agricultural_insurance) {
+          <fa-icon class="text-success" size="2x" [icon]="faCheck"></fa-icon>
+          }@else {
+          <fa-icon class="text-danger" size="2x" [icon]="faXmark"></fa-icon>
+          }
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label">Fecha de siembra</label>
+          <p>
+            <strong
+              >{{
+                datePipe.transform(
+                  this.cuaderno.informacion_del_campo.crop?.fecha_siembra,
+                  "yyyy-MM-dd",
+                  "+000"
+                )
+              }}
+            </strong>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-12 form-control-label">Fecha cosecha</label>
+          <p>
+            <strong
+              >{{
+                datePipe.transform(
+                  this.cuaderno.informacion_del_campo.crop?.fecha_cosecha,
+                  "yyyy-MM-dd",
+                  "+000"
+                )
+              }}
+            </strong>
+          </p>
+        </div>
+      </div>
+    </c-tab-pane>
+
+    <c-tab-pane class="p-3">
+      <div class="form-group row mb-3">
+        <div class="col-md-3">
+          <label class="col-md-12 form-control-label">Fuente de agua</label>
+          <p>
+            <strong
+              >{{ cuaderno.informacion_del_campo.water?.water_source }}
+            </strong>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <label class="col-md-12 form-control-label">Tenencia</label>
+          <p>
+            <strong
+              >{{ cuaderno.informacion_del_campo.water?.possession }}
+            </strong>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <label class="col-md-12 form-control-label">Fuente de energía</label>
+          <p>
+            <strong
+              >{{ cuaderno.informacion_del_campo.water?.power_source }}
+            </strong>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <label class="col-md-12 form-control-label">Sistema de riego</label>
+          <p>
+            <strong
+              >{{ cuaderno.informacion_del_campo.water?.irrigation_system }}
+            </strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="form-group row mb-3">
+        <div class="col-md-12">
+          <label class="col-md-12 form-control-label">Observaciones</label>
+          <p>
+            <strong>{{ cuaderno.informacion_del_campo.water?.obs }} </strong>
+          </p>
+        </div>
+      </div>
+    </c-tab-pane>
+
+    <!-- ##### Maquinaria ##### -->
+    <c-tab-pane class="p-3">
+      @if(cuaderno.maquinarias.length>0){
+      <div class="table-responsive my-4">
+        <table bordered [cBorder]="1" borderColor="black" cTable>
+          <thead>
+            <tr>
+              <th>Maquinaria</th>
+              <th>Época</th>
+              <th>Cant. Total</th>
+              <th>Unidad</th>
+              <th>Precio</th>
+              <th>Costo/ha</th>
+              <th>Costo total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (work of works; track $index) { @if (worksOfMachines(work._id))
+            {
+            <tr>
+              <td colspan="7">
+                <strong style="color: green">{{ work.name }} </strong>
+              </td>
+            </tr>
+            } @for (maquinaria of cuaderno.maquinarias; track $index) { @if
+            (maquinaria.labor._id == work._id) {
+            <tr>
+              <td>{{ maquinaria.machinery.name }}</td>
+              <td>{{ maquinaria.epoca }}</td>
+              <td>{{ maquinaria.amount }}</td>
+              <td>{{ maquinaria.unit }}</td>
+              <td style="text-align: right" >{{ maquinaria.price | currency:'CLP':'$':'1.1-1'}}</td>
+              <td style="text-align: right" >{{ maquinaria.total_cost_ha | currency:'CLP':'$':'1.1-1'}}</td>
+              <td style="text-align: right" >{{ maquinaria.total_cost | currency:'CLP':'$':'1.1-1'}}</td>
+            </tr>
+            } } }
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex; align-items: center; flex-direction: column">
+        <app-pie-chart
+          [data]="chartMachines"
+          type="pie"
+          title="Costo/ha por labor"
+        ></app-pie-chart>
+      </div>
+      }
+    </c-tab-pane>
+
+    <!-- ##### Insumos ##### -->
+    <c-tab-pane class="p-3">
+      @if(cuaderno.insumos.length>0){
+      <div class="table-responsive">
+        <table bordered [cBorder]="1" borderColor="black" cTable>
+          <thead>
+            <tr>
+              <!-- <th>CATEGORÍA</th>  -->
+              <th>Insumo</th>
+              <th>Época</th>
+              <th>Cant. Total</th>
+              <th>Unidad</th>
+              <th>Costo</th>
+              <th>Costo/ha</th>
+              <th>Costo total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (category of categorys; track $index) { @if
+            (categorysOfInsumos(category._id)) {
+            <tr>
+              <td colspan="7">
+                <strong style="color: green"> {{ category.name }}</strong>
+              </td>
+            </tr>
+
+            @for (insumo of cuaderno.insumos; track $index) { @if
+            (insumo.category._id == category._id) {
+            <tr>
+              @for (product of products; track $index) { @if (product._id
+              ==insumo.product ) {
+              <td>{{ product.name }}</td>
+              } }
+              <td>{{ insumo.epoca }}</td>
+              <td>{{ insumo.amount }}</td>
+              <td>{{ insumo.unit }}</td>
+              <td style="text-align: right" >{{ insumo.price | currency:'CLP':'$':'1.1-1' }}</td>
+              <td style="text-align: right" >{{ insumo.total_cost_ha | currency:'CLP':'$':'1.1-1'}}</td>
+              <td style="text-align: right" >{{ insumo.total_cost | currency:'CLP':'$':'1.1-1' }}</td>
+            </tr>
+            } }}}
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex; align-items: center; flex-direction: column">
+        <app-pie-chart
+          [data]="chartInsumos"
+          type="pie"
+          title="Costo/ha por insumos"
+          [legend]="true"
+        ></app-pie-chart>
+      </div>
+      }
+    </c-tab-pane>
+
+    <!-- ##### Mano de obra ##### -->
+    <c-tab-pane class="p-3">
+      @if(cuaderno.mano_de_obra.length>0){
+      <div class="table-responsive">
+        <table bordered [cBorder]="1" borderColor="black" cTable>
+          <tbody>
+            <tr>
+              <th>M.O</th>
+              <th>Época</th>
+              <th>Cant. Total</th>
+              <th>Unidad</th>
+              <th>Costo</th>
+              <th>Costo/ha</th>
+              <th>Costo total</th>
+            </tr>
+            @for (work of works; track $index) { @if
+            (hasForId(cuaderno.mano_de_obra, work._id, 'labor')) {
+            <tr>
+              <td>
+                <strong style="color: green">{{ work.name }} </strong>
+              </td>
+            </tr>
+
+            @for (mo of cuaderno.mano_de_obra; track $index) { @if(mo.labor._id
+            == work._id){
+            <tr>
+              <td>{{ mo.mo.name }}</td>
+              <td>{{ mo.epoca }}</td>
+              <td>{{ mo.amount }}</td>
+              <td>{{ mo.unit }}</td>
+              <td style="text-align: right" >{{ mo.price | currency:'CLP':'$':'1.1-1' }}</td>
+              <td style="text-align: right" >{{ mo.total_cost_ha | currency:'CLP':'$':'1.1-1' }}</td>
+              <td style="text-align: right" >{{ mo.total_cost | currency:'CLP':'$':'1.1-1' }}</td>
+            </tr>
+            }}}}
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex; align-items: center; flex-direction: column">
+        <app-pie-chart
+          [data]="chartMO"
+          type="pie"
+          title="Costo/ha por M.O"
+          [legend]="true"
+        ></app-pie-chart>
+      </div>
+      }
+    </c-tab-pane>
+
+    <!-- ##### Otros costos ##### -->
+    <c-tab-pane class="p-3">
+      @if(cuaderno.otros_costos.length>0){
+      <div class="table-responsive my-4">
+        <table bordered [cBorder]="1" borderColor="black" cTable>
+          <tbody>
+            <tr>
+              <th>O.C</th>
+              <th>Época</th>
+              <th>Cant. Total</th>
+              <th>Unidad</th>
+              <th>Precio</th>
+              <th>Costo/ha</th>
+              <th>Costo total</th>
+            </tr>
+            @for (work of works; track $index) { @if
+            (hasForId(cuaderno.otros_costos, work._id, 'labor')) {
+            <tr>
+              <td>
+                <strong style="color: green">{{ work.name }} </strong>
+              </td>
+            </tr>
+
+            @for (oc of cuaderno.otros_costos; track $index) { @if(oc.labor._id
+            == work._id){
+            <tr>
+              <td>{{ oc.otro_costo.name }}</td>
+              <td>{{ oc.epoca }}</td>
+              <td>{{ oc.amount }}</td>
+              <td>{{ oc.unit }}</td>
+              <td style="text-align: right" >{{ oc.price | currency:'CLP':'$':'1.1-1' }}</td>
+              <td style="text-align: right" >{{ oc.total_cost_ha | currency:'CLP':'$':'1.1-1' }}</td>
+              <td style="text-align: right" >{{ oc.total_cost | currency:'CLP':'$':'1.1-1' }}</td>
+            </tr>
+            } } } }
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex; align-items: center; flex-direction: column">
+        <app-pie-chart
+          [data]="chartOC"
+          type="pie"
+          title="Costo/ha por O.C"
+          [legend]="true"
+        ></app-pie-chart>
+      </div>
+      }
+    </c-tab-pane>
+
+    <!-- ##### guia analisis ##### -->
+    <c-tab-pane class="p-3">
+      <div class="">
+        @if(cuaderno.guia_analisis){
+        <table
+          bordered
+          [cBorder]="1"
+          borderColor="black"
+          cTable
+          [responsive]="true"
+        >
+          <thead>
+            <tr>
+              <th>Industria</th>
+              <th>Limpio seco</th>
+              <th>Limpia seco/ha</th>
+              <th>Peso bruto</th>
+              <th>Peso bruto/ha</th>
+              <th>Precio venta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ cuaderno.guia_analisis.industria }}</td>
+              <td>{{ cuaderno.guia_analisis.limpioSeco }}</td>
+              <td>{{ cuaderno.guia_analisis.limpioSecoHA }}</td>
+              <td>{{ cuaderno.guia_analisis.pesoBruto }}</td>
+              <td>{{ cuaderno.guia_analisis.pesoBrutoHA }}</td>
+              <td style="text-align: right" >{{ cuaderno.guia_analisis.precioVenta | currency:'CLP':'$':'1.1-1' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        } @if (cuaderno.pathGuiaAnalisis) {
+        <div class="col-md-4 mb-3">
+          <c-card>
+            <c-card-body>
+              <label cLabel style="margin-right: 0.5rem"
+                >Archivo guía de análisis
+              </label>
+              <app-btn-descargar
+                [cuaderno]="cuaderno"
+                typeFile="pathGuiaAnalisis"
+              />
+            </c-card-body>
+          </c-card>
+        </div>
+        }
+        @if (cuaderno.pathAdopcion1) {
+          <div class="col-md-4 mb-3">
+            <c-card>
+              <c-card-body>
+                <label cLabel style="margin-right: 0.5rem"
+                  >Cálculo índice de adopción 1
+                </label>
+                <app-btn-descargar
+                  [cuaderno]="cuaderno"
+                  typeFile="pathAdopcion1"
+                />
+              </c-card-body>
+            </c-card>
+          </div>
+          }
+          @if (cuaderno.pathAdopcion2) {
+            <div class="col-md-4 mb-3">
+              <c-card>
+                <c-card-body>
+                  <label cLabel style="margin-right: 0.5rem"
+                    >Cálculo índice de adopción 2
+                  </label>
+                  <app-btn-descargar
+                    [cuaderno]="cuaderno"
+                    typeFile="pathAdopcion2"
+                  />
+                </c-card-body>
+              </c-card>
+            </div>
+            }
+      </div>
+    </c-tab-pane>
+  </c-tab-content>
+</div>
+
+<div class="modal-footer"></div>
+
+<toaster-container [toasterconfig]="config"></toaster-container>

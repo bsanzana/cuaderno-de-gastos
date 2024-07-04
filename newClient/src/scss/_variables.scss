@@ -1,0 +1,39 @@
+// Variable overrides
+//
+// If you want to customize your project please add your variables below.
+
+$enable-deprecation-messages: false !default;
+
+
+// $sidebar-nav-link-hover-bg: #66BB6A;
+
+/* Estilos personalizados para las pestañas de navegación */
+.nav.nav-tabs {
+    border-bottom: 1.5px solid #39f; /* Agrega un borde inferior azul */
+  }
+  
+  .nav.nav-tabs .nav-item {
+    margin-bottom: -1px; /* Elimina el espacio entre las pestañas */
+  }
+  
+  .nav.nav-tabs .nav-link {
+    color: #333; /* Color del texto de las pestañas */
+    background-color: transparent; /* Fondo transparente */
+    border: none; /* Elimina el borde */
+    border-radius: 0; /* Elimina el redondeo de las esquinas */
+    padding: 10px 20px; /* Aumenta el espacio interno */
+    font-weight: bold; /* Añade negrita */
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; /* Transición suave */
+  }
+  
+  .nav.nav-tabs .nav-link:hover {
+    background-color: #f8f9fa; /* Color de fondo al pasar el mouse */
+    color: #39f; /* Color del texto al pasar el mouse */
+  }
+  
+  .nav.nav-tabs .nav-link.active {
+    background-color: #39f; /* Color de fondo del activo */
+    color: #fff; /* Color del texto del activo */
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2); /* Agrega una sombra sutil */
+    transform: translateY(-1px); /* Levanta ligeramente la pestaña */
+  }

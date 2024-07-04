@@ -1,0 +1,144 @@
+<c-row ngPreserveWhitespaces>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <div class="text-end">
+          <button
+            cButton
+            color="info"
+            shape="rounded-pill"
+            class="text-white my-2"
+            (click)="newOpenModal()"
+          >
+            <fa-icon class="text-white" [icon]="faPlus"></fa-icon>
+            Nuevo
+          </button>
+          <app-descargar-sabana [cuadernos]="forms"></app-descargar-sabana>
+        </div>
+      </c-card-header>
+      <c-card-body>
+        <div class="table-responsive">
+          <table [hover]="false" cTable>
+            <thead>
+              <tr>
+                <th></th>
+                <th>
+                  <input
+                    cFormControl
+                    type="text"
+                    [(ngModel)]="filtros.rut"
+                    (input)="filtrar()"
+                  />
+                </th>
+                <th>
+                  <input
+                    cFormControl
+                    type="text"
+                    [(ngModel)]="filtros.name"
+                    (input)="filtrar()"
+                  />
+                </th>
+                <th>
+                  <!--  <c-multi-select multiple  [(ngModel)]="filtros.companyGroup"  (valueChange)="filtrar()">
+                    @for (companyGroup of companyGroups; track $index) {
+                      <c-multi-select-option value={{companyGroup.name}}>{{companyGroup.name}}</c-multi-select-option>
+                    }
+                  </c-multi-select> -->
+                </th>
+                <th></th>
+                <th></th>
+                <th class="text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>#</th>
+                <th>RUT</th>
+                <th>PRODUCTOR</th>
+                <th>UNIDAD OPERATIVA</th>
+                <th>CAMPO</th>
+                <th>TEMPORADA</th>
+                <th class="text-center">ACCIÓN</th>
+              </tr>
+              @for (form of forms; track form; let i = $index) {
+              <tr>
+                <td>{{ i + 1 + (page - 1) * pageSize }}</td>
+                <td>{{ form.informacion_del_campo.company.rut }}</td>
+                <td>{{ form.informacion_del_campo.company.name }}</td>
+                <td>{{ form.informacion_del_campo.company.group.name }}</td>
+                <td>
+                  @for (field of form.informacion_del_campo.company.fields;
+                  track $index) { @if(form.informacion_del_campo.company_field
+                  === field._id){
+                  {{ field.name }}
+                  } }
+                </td>
+                <td>{{ form.informacion_del_campo.season.name }}</td>
+                <td class="text-center">
+                  <c-button-group aria-label="Todos" role="group">
+                    <button
+                      class="me-1"
+                      size="sm"
+                      cButton
+                      shape="rounded-pill"
+                      color="info"
+                      (click)="openModal(form)"
+                    >
+                      <fa-icon class="text-white" [icon]="faEye"></fa-icon>
+                    </button>
+                    @if
+                    (form.informacion_del_campo.company.group.advisors.includes(
+                    user.id) || user.role == 'admin') {
+                    <button
+                      class="me-1"
+                      size="sm"
+                      cButton
+                      shape="rounded-pill"
+                      color="info"
+                      (click)="editarModal(form)"
+                    >
+                      <fa-icon
+                        class="text-white"
+                        [icon]="faPenToSquare"
+                      ></fa-icon>
+                    </button>
+                    <button
+                      class="me-1"
+                      size="sm"
+                      cButton
+                      shape="rounded-pill"
+                      color="info"
+                      (click)="exportExcel(form)"
+                    >
+                      <fa-icon
+                        class="text-white"
+                        [icon]="faFileExcel"
+                      ></fa-icon>
+                    </button>
+                    }
+                  </c-button-group>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <c-row class="mt-3">
+          <ngb-pagination
+            [collectionSize]="total"
+            [page]="page"
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)"
+            aria-label="Pagination"
+            [maxSize]="5"
+            [rotate]="true"
+          ></ngb-pagination>
+          <p>Total: {{ total }}</p>
+        </c-row>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<toaster-container [toasterconfig]="config"></toaster-container>

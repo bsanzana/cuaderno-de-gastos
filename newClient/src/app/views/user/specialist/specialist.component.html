@@ -1,0 +1,82 @@
+<c-row ngPreserveWhitespaces>
+
+    <div class="text-end">
+      <button cButton color="info" shape="rounded-pill" class="text-white my-3" (click)="newOpenModal()">Nuevo especialista</button>
+    </div>
+  
+    <div class="table-responsive mt-3">
+      <table [hover]="false" cTable>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>¿ACTIVO?</th>
+          <th>IMAGEN</th>
+          <th>RUT</th>
+          <th>NOMBRE</th>
+          
+          <th>TELÉFONO</th>
+          <th style="text-align:right">ACCIÓN</th>
+        </tr>
+        </thead>
+        <tbody>
+  
+          @for (specialist of specialists; track specialist; let i = $index) {
+            <tr class="align-middle">
+              <td>{{i + 1 + ((page - 1) * pageSize)}}</td>
+              <td>{{specialist.active ? 'Sí' : 'No'}}</td>
+              <td>
+                @if (specialist.image == null) {
+                     <c-avatar
+                      shape="rounded-1"
+                      size="md"
+                      src="./assets/images/blank-profile-picture.png"
+                    />
+                }@else {
+                    <c-avatar
+                      shape="rounded-1"
+                      size="md"
+                      src="{{ ENDPOINT_USER_IMAGE }}{{ specialist.image }}"
+                    />
+                }
+                
+                
+              </td>
+              <th>{{specialist.rut}}</th>
+              <td>{{specialist.name}} {{specialist.lastname}}</td>
+              
+              <td>{{specialist.phone}}</td>
+              <td align="right">
+                <c-button-group aria-label="Todos" role="group">
+                  
+  
+                    <button class="me-1" size="sm" cButton shape="rounded-pill" color="info" (click)="editModal(specialist._id)">
+                      <fa-icon class="text-white" [icon]="faPenToSquare"></fa-icon>
+                    </button>
+  
+  
+                </c-button-group>
+  
+              </td>
+            </tr>
+          }
+        
+        </tbody>
+      </table>
+    </div>
+  
+  </c-row>
+  
+  <c-row class="mt-3">
+    <ngb-pagination
+    [collectionSize]="total"
+    [page]="page"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+    aria-label="Pagination"
+    [maxSize]="5"
+    [rotate]="true"
+    ></ngb-pagination>
+    <p>Total: {{ total }}</p>
+  </c-row>
+  
+  <toaster-container [toasterconfig]="config"></toaster-container>
